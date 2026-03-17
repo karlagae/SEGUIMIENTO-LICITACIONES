@@ -17,9 +17,55 @@ st.set_page_config(
 # =========================================
 st.markdown("""
 <style>
+
+
+
+
+
+
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 header {visibility: hidden;}
+
+
+.filters-box {
+    background: #f1f3f7;
+    padding: 22px 24px;
+    border-radius: 16px;
+    margin-top: 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.filters-box {
+    background: #f1f3f7;
+    padding: 22px 24px;
+    border-radius: 16px;
+    margin-top: 18px;
+    margin-bottom: 18px;
+}
+
+/* LABELS */
+div[data-testid="stSelectbox"] label {
+    color: #2c2f5a !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+}
+
+/* CAJA DEL SELECT */
+div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+    background: #ffffff !important;
+    border-radius: 12px !important;
+    border: 1px solid #e3e7ef !important;
+    min-height: 52px !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* TEXTO */
+div[data-testid="stSelectbox"] span {
+    color: #5b6178 !important;
+    font-size: 15px !important;
+}
 
 .block-container {
     padding-top: 0 !important;
@@ -499,6 +545,11 @@ st.markdown("""
 st.markdown('<div class="dashboard-body">', unsafe_allow_html=True)
 
 # =========================================
+
+
+
+st.markdown('<div class="filters-box">', unsafe_allow_html=True)
+
 # FILTROS
 # =========================================
 f1, f2, f3, f4 = st.columns(4)
@@ -524,6 +575,13 @@ if estado_filtro != "Todos":
     df_filtrado = df_filtrado[df_filtrado["estado"] == estado_filtro]
 if elaboro_filtro != "Todos":
     df_filtrado = df_filtrado[df_filtrado["elaboro"] == elaboro_filtro]
+
+
+
+
+
+st.markdown('</div>', unsafe_allow_html=True)
+
 
 # =========================================
 # KPIS
