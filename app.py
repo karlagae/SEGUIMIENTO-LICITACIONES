@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from pathlib import Path
+import html as ihtml
 
 # =========================================
 # CONFIG
@@ -36,21 +37,18 @@ html, body, [class*="css"] {
     font-family: "Segoe UI", sans-serif;
 }
 
-.dashboard-shell {
-    max-width: 1380px;
-    margin: 14px auto 28px auto;
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 18px 36px rgba(0,0,0,0.18);
-}
-
+/* ===== Header ===== */
 .topbar {
+    max-width: 1380px;
+    margin: 16px auto 0 auto;
     background: linear-gradient(90deg, #1c248b 0%, #2738b2 100%);
     color: white;
-    padding: 22px 28px;
+    border-radius: 20px 20px 0 0;
+    padding: 24px 28px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    box-shadow: 0 18px 36px rgba(0,0,0,0.18);
 }
 
 .brand-wrap {
@@ -113,16 +111,37 @@ html, body, [class*="css"] {
     border: 2px solid rgba(255,255,255,0.65);
 }
 
+/* ===== Wrapper blanco ===== */
 .dashboard-body {
+    max-width: 1380px;
+    margin: 0 auto 28px auto;
     background: linear-gradient(180deg, #edf2fa 0%, #f8fbff 100%);
     padding: 22px;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 18px 36px rgba(0,0,0,0.18);
 }
 
-.filters-card {
-    background: transparent;
-    margin-bottom: 18px;
+/* ===== Filtros ===== */
+div[data-testid="stSelectbox"] > label {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
 }
 
+div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+    background: #2a2d3a !important;
+    border-radius: 14px !important;
+    border: none !important;
+    min-height: 58px !important;
+    color: white !important;
+}
+
+div[data-testid="stSelectbox"] [data-baseweb="select"] span {
+    color: white !important;
+    font-size: 16px !important;
+}
+
+/* ===== KPI Cards ===== */
 .kpi-card {
     border-radius: 16px;
     padding: 18px 20px;
@@ -176,6 +195,7 @@ html, body, [class*="css"] {
     margin-top: 6px;
 }
 
+/* ===== White box ===== */
 .white-box {
     background: white;
     border-radius: 16px;
@@ -202,6 +222,7 @@ html, body, [class*="css"] {
     text-align: center;
 }
 
+/* ===== Tabla resumen ===== */
 .table-wrap {
     border: 1px solid #edf2f8;
     border-radius: 10px;
@@ -210,7 +231,7 @@ html, body, [class*="css"] {
 
 .table-header, .table-row {
     display: grid;
-    grid-template-columns: 2.4fr 1.2fr 1.2fr 1fr;
+    grid-template-columns: 2.5fr 1.3fr 1.3fr 1fr;
     align-items: center;
 }
 
@@ -248,6 +269,7 @@ html, body, [class*="css"] {
 .pill-navy { background: #111111; }
 .pill-gray { background: #7b88a5; }
 
+/* ===== Stats/Activity ===== */
 .stat-card {
     background: white;
     border-radius: 16px;
@@ -330,29 +352,6 @@ html, body, [class*="css"] {
     color: #2d4de2;
     font-weight: 900;
     margin-right: 10px;
-}
-
-div[data-testid="stSelectbox"] > label {
-    color: white !important;
-    font-weight: 700 !important;
-    font-size: 15px !important;
-}
-
-div[data-testid="stSelectbox"] > div {
-    background: transparent !important;
-}
-
-div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
-    background: #2a2d3a !important;
-    border-radius: 14px !important;
-    border: none !important;
-    min-height: 58px !important;
-    color: white !important;
-}
-
-div[data-testid="stSelectbox"] [data-baseweb="select"] span {
-    color: white !important;
-    font-size: 16px !important;
 }
 
 @media (max-width: 1100px) {
@@ -466,31 +465,33 @@ def badge_estado(row):
     return "Sin estatus", "pill-gray"
 
 # =========================================
-# HEADER / WRAPPER
+# HEADER
 # =========================================
 st.markdown("""
-<div class="dashboard-shell">
-    <div class="topbar">
-        <div class="brand-wrap">
-            <div class="brand-icon">📄</div>
-            <div class="brand-title">Panel de<br>Oportunidades</div>
-        </div>
-
-        <div class="nav-wrap">
-            <div class="nav-item active">Inicio</div>
-            <div class="nav-item">Procesos</div>
-            <div class="nav-item">Reportes</div>
-        </div>
-
-        <div class="user-wrap">
-            <div>🔔 Notificaciones</div>
-            <div class="user-badge">👩🏻</div>
-            <div>Usuario ▾</div>
-        </div>
+<div class="topbar">
+    <div class="brand-wrap">
+        <div class="brand-icon">📄</div>
+        <div class="brand-title">Panel de<br>Oportunidades</div>
     </div>
 
-    <div class="dashboard-body">
+    <div class="nav-wrap">
+        <div class="nav-item active">Inicio</div>
+        <div class="nav-item">Procesos</div>
+        <div class="nav-item">Reportes</div>
+    </div>
+
+    <div class="user-wrap">
+        <div>🔔 Notificaciones</div>
+        <div class="user-badge">👩🏻</div>
+        <div>Usuario ▾</div>
+    </div>
+</div>
 """, unsafe_allow_html=True)
+
+# =========================================
+# ABRIR WRAPPER BLANCO
+# =========================================
+st.markdown('<div class="dashboard-body">', unsafe_allow_html=True)
 
 # =========================================
 # FILTROS
@@ -539,6 +540,8 @@ procesos_totales = len(df_filtrado)
 en_curso = int(df_filtrado.apply(detectar_en_curso, axis=1).sum())
 ganadas = int(df_filtrado.apply(detectar_ganada, axis=1).sum())
 perdidas = int(df_filtrado.apply(detectar_perdida, axis=1).sum())
+
+st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
 
 k1, k2, k3, k4 = st.columns(4)
 
@@ -602,10 +605,10 @@ df_tabla = df_tabla.head(6)
 
 filas_html = ""
 for _, row in df_tabla.iterrows():
-    titulo = limpiar(row.get("licitacion", "")) or "Sin identificador"
+    titulo = ihtml.escape(limpiar(row.get("licitacion", "")) or "Sin identificador")
     estado_badge, badge_class = badge_estado(row)
-    referencia = limpiar(row.get("tipo", "")) or "-"
-    cierre = formatear_fecha(row.get("fallo", ""))
+    referencia = ihtml.escape(limpiar(row.get("tipo", "")) or "-")
+    cierre = ihtml.escape(formatear_fecha(row.get("fallo", "")))
 
     filas_html += f"""
     <div class="table-row">
@@ -616,7 +619,7 @@ for _, row in df_tabla.iterrows():
     </div>
     """
 
-st.markdown(f"""
+tabla_html = f"""
 <div class="white-box">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
         <div class="section-title" style="margin-bottom:0;">Resumen de Oportunidades</div>
@@ -633,12 +636,13 @@ st.markdown(f"""
         {filas_html}
     </div>
 </div>
-""", unsafe_allow_html=True)
+"""
+st.markdown(tabla_html, unsafe_allow_html=True)
 
 st.markdown("<div style='height:22px'></div>", unsafe_allow_html=True)
 
 # =========================================
-# ESTADISTICAS
+# ESTADÍSTICAS
 # =========================================
 tipos_resumen = (
     df_filtrado["tipo"]
@@ -660,6 +664,9 @@ if not tipos_resumen.empty:
 else:
     bars_html = '<div class="bar bar-blue" style="height:20px;"></div>'
 
+# =========================================
+# ACTIVIDADES
+# =========================================
 actividades = []
 for _, row in df_filtrado.iterrows():
     lic = limpiar(row.get("licitacion", "")) or "Proceso sin nombre"
@@ -673,22 +680,21 @@ for _, row in df_filtrado.iterrows():
 
 df_act = pd.DataFrame(actividades)
 
-actividad_html = ""
+actividad_items = ""
 if not df_act.empty:
     df_act = df_act.dropna(subset=["fecha"]).sort_values("fecha").head(5)
     for _, row in df_act.iterrows():
-        actividad_html += f"""
-        <li><span class="dot">●</span>{row['evento']}: “{row['licitacion']}” — {row['fecha'].strftime('%d %b %Y')}</li>
-        """
+        evento = ihtml.escape(str(row["evento"]))
+        lic = ihtml.escape(str(row["licitacion"]))
+        fecha = row["fecha"].strftime("%d %b %Y")
+        actividad_items += f'<li><span class="dot">●</span>{evento}: “{lic}” — {fecha}</li>'
 else:
-    actividad_html = """
-    <li><span class="dot">●</span>No hay actividades próximas registradas.</li>
-    """
+    actividad_items = '<li><span class="dot">●</span>No hay actividades próximas registradas.</li>'
 
 c1, c2 = st.columns([1.35, 1])
 
 with c1:
-    st.markdown(f"""
+    stats_html = f"""
     <div class="stat-card">
         <div class="stat-title">📊 Estadísticas</div>
         <div class="bar-zone">
@@ -709,25 +715,24 @@ with c1:
             </div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """
+    st.markdown(stats_html, unsafe_allow_html=True)
 
 with c2:
-    st.markdown(f"""
+    activity_html = f"""
     <div class="stat-card">
         <div class="stat-title">Última Actividad</div>
         <ul class="activity-list">
-            {actividad_html}
+            {actividad_items}
         </ul>
     </div>
-    """, unsafe_allow_html=True)
+    """
+    st.markdown(activity_html, unsafe_allow_html=True)
 
 # =========================================
-# CIERRE WRAPPER
+# CERRAR WRAPPER BLANCO
 # =========================================
-st.markdown("""
-    </div>
-</div>
-""", unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)
 
 # =========================================
 # DETALLE OPCIONAL
