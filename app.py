@@ -1,43 +1,51 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="Plataforma Licitaciones",
+    page_title="Plincipal Licitaciones",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# =========================
-# CSS
-# =========================
+# Ocultar menú y footer de Streamlit
 st.markdown("""
 <style>
-/* ===== Fondo general ===== */
-html, body, [class*="css"] {
-    font-family: 'Segoe UI', sans-serif;
-}
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
 
+/* Fondo general */
 .stApp {
-    background: linear-gradient(180deg, #062a7b 0%, #0b2f86 45%, #062a7b 100%);
+    background: linear-gradient(180deg, #17268f 0%, #1d2c95 100%);
+    padding-top: 20px;
 }
 
-/* ===== Contenedor principal ===== */
+/* Quitar padding default */
+.block-container {
+    padding-top: 0rem !important;
+    padding-bottom: 0rem !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+    max-width: 1400px !important;
+}
+
+/* Contenedor principal */
 .main-wrapper {
-    max-width: 1280px;
-    margin: 20px auto;
-    background: #f6f8fc;
-    border-radius: 0px;
+    background: #f4f7fb;
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.20);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+    margin-top: 10px;
+    margin-bottom: 30px;
 }
 
-/* ===== Header ===== */
+/* Header */
 .topbar {
-    background: linear-gradient(90deg, #032a84 0%, #0b47c2 100%);
+    background: linear-gradient(90deg, #06297e 0%, #0a3ea8 100%);
     color: white;
-    padding: 22px 28px;
+    padding: 22px 30px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
 }
 
 .brand-section {
@@ -48,24 +56,22 @@ html, body, [class*="css"] {
 
 .brand-icon {
     font-size: 34px;
-    line-height: 1;
 }
 
 .brand-title {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
     line-height: 1.05;
 }
 
 .nav-center {
     display: flex;
-    gap: 34px;
+    gap: 35px;
     align-items: center;
 }
 
 .nav-item {
-    color: white;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 600;
     opacity: 0.95;
     position: relative;
@@ -75,10 +81,10 @@ html, body, [class*="css"] {
     content: "";
     position: absolute;
     left: 0;
-    bottom: -8px;
+    bottom: -7px;
     width: 100%;
     height: 2px;
-    background: #f4c048;
+    background: #f5c04c;
     border-radius: 10px;
 }
 
@@ -86,7 +92,7 @@ html, body, [class*="css"] {
     display: flex;
     align-items: center;
     gap: 18px;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 600;
 }
 
@@ -94,31 +100,28 @@ html, body, [class*="css"] {
     width: 42px;
     height: 42px;
     border-radius: 50%;
-    background: #f7c59f;
-    border: 2px solid rgba(255,255,255,0.7);
-    display: inline-flex;
+    background: #f2c4a3;
+    display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    border: 2px solid rgba(255,255,255,0.6);
 }
 
-/* ===== Layout interno ===== */
+/* Body layout */
 .content-area {
     display: flex;
-    gap: 22px;
-    padding: 26px;
-    background: linear-gradient(180deg, #eef3fb 0%, #f7f9fc 100%);
+    gap: 24px;
+    padding: 24px;
+    align-items: flex-start;
 }
 
-/* ===== Sidebar ===== */
+/* Sidebar */
 .left-menu {
-    width: 230px;
+    width: 240px;
     background: white;
-    border-radius: 14px;
-    padding: 0;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    height: fit-content;
+    border-radius: 12px;
     overflow: hidden;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
     border: 1px solid #e8edf5;
 }
 
@@ -133,7 +136,7 @@ html, body, [class*="css"] {
 .menu-item {
     padding: 16px 18px;
     font-size: 17px;
-    color: #21325b;
+    color: #233760;
     border-bottom: 1px solid #edf1f7;
 }
 
@@ -141,32 +144,31 @@ html, body, [class*="css"] {
     border-bottom: none;
 }
 
-/* ===== Main section ===== */
+/* Main panel */
 .main-panel {
     flex: 1;
 }
 
-/* ===== KPI Cards ===== */
+/* KPI cards */
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 18px;
-    margin-bottom: 26px;
+    margin-bottom: 22px;
 }
 
 .kpi-card {
     color: white;
     border-radius: 12px;
-    padding: 18px 22px;
+    padding: 18px 20px;
     display: flex;
     align-items: center;
     gap: 14px;
-    min-height: 92px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    min-height: 88px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.14);
 }
 
 .kpi-icon {
-    font-size: 27px;
     width: 46px;
     height: 46px;
     border-radius: 10px;
@@ -174,13 +176,13 @@ html, body, [class*="css"] {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 24px;
 }
 
 .kpi-title {
     font-size: 16px;
     font-weight: 600;
-    opacity: 0.95;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 
 .kpi-value {
@@ -189,27 +191,27 @@ html, body, [class*="css"] {
 }
 
 .blue-card {
-    background: linear-gradient(90deg, #0a43bf 0%, #1157e6 100%);
+    background: linear-gradient(90deg, #0c46bf 0%, #0f5ae6 100%);
 }
 
-.blue-dark-card {
-    background: linear-gradient(90deg, #0a2f89 0%, #09306f 100%);
+.blue-card-2 {
+    background: linear-gradient(90deg, #0c46bf 0%, #0f5ae6 100%);
 }
 
 .orange-card {
-    background: linear-gradient(90deg, #ef9b20 0%, #f5b73f 100%);
+    background: linear-gradient(90deg, #ef9e25 0%, #f5b340 100%);
 }
 
 .navy-card {
-    background: linear-gradient(90deg, #081d4e 0%, #10255e 100%);
+    background: linear-gradient(90deg, #091b4f 0%, #10245d 100%);
 }
 
-/* ===== Bloques blancos ===== */
+/* White boxes */
 .white-box {
     background: white;
-    border-radius: 14px;
+    border-radius: 12px;
     padding: 22px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.07);
     border: 1px solid #e9eef6;
 }
 
@@ -227,72 +229,74 @@ html, body, [class*="css"] {
 }
 
 .small-btn {
-    border: 1px solid #d7dfea;
-    color: #30466f;
+    border: 1px solid #d6deea;
     background: white;
-    padding: 9px 20px;
+    color: #30466f;
+    padding: 9px 18px;
     border-radius: 8px;
     font-weight: 600;
     font-size: 15px;
 }
 
-/* ===== Tabla ===== */
+/* Tabla */
 .table-wrap {
-    border: 1px solid #eef2f7;
+    border: 1px solid #edf2f8;
     border-radius: 10px;
     overflow: hidden;
 }
 
-.table-header, .table-row {
+.table-header,
+.table-row {
     display: grid;
     grid-template-columns: 2.3fr 1.2fr 1fr 1fr;
     align-items: center;
 }
 
 .table-header {
-    background: #f0f4fa;
-    color: #32425f;
+    background: #eff4fa;
+    color: #30415f;
     font-weight: 700;
     font-size: 16px;
 }
 
-.table-header div, .table-row div {
-    padding: 16px 18px;
+.table-header div,
+.table-row div {
+    padding: 15px 18px;
 }
 
 .table-row {
-    background: white;
     border-top: 1px solid #edf1f7;
-    color: #243553;
+    color: #27395f;
+    background: white;
     font-size: 16px;
 }
 
 .status-pill {
     display: inline-block;
-    padding: 7px 12px;
+    padding: 6px 12px;
     border-radius: 8px;
+    color: white;
     font-size: 14px;
     font-weight: 700;
-    color: white;
 }
 
 .pill-blue {
-    background: #0c58dc;
+    background: #0b56d8;
 }
 
 .pill-blue2 {
-    background: #2156b3;
+    background: #2557b8;
 }
 
 .pill-orange {
-    background: #f2a129;
+    background: #f0a126;
 }
 
 .pill-orange2 {
-    background: #e3911a;
+    background: #e08b18;
 }
 
-/* ===== Bottom section ===== */
+/* Bottom area */
 .bottom-grid {
     display: grid;
     grid-template-columns: 1.35fr 1fr;
@@ -304,35 +308,44 @@ html, body, [class*="css"] {
     font-size: 20px;
     font-weight: 800;
     color: #17326a;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
+}
+
+/* Fake chart */
+.chart-layout {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 10px;
+    align-items: center;
 }
 
 .chart-area {
-    height: 270px;
+    height: 250px;
     display: flex;
-    align-items: end;
-    gap: 14px;
-    padding: 20px 8px 10px 8px;
+    align-items: flex-end;
+    gap: 12px;
+    padding: 10px 8px 0 8px;
     border-top: 1px solid #edf1f7;
+    margin-top: 8px;
 }
 
 .bar {
-    width: 38px;
+    width: 36px;
     border-radius: 8px 8px 0 0;
 }
 
 .bar-blue { background: #0a43bf; }
-.bar-blue2 { background: #235fcb; }
-.bar-blue3 { background: #5f8fdc; }
-.bar-orange { background: #f1a22b; }
+.bar-blue2 { background: #2a5ebd; }
+.bar-blue3 { background: #7ca1db; }
+.bar-orange { background: #ef9d24; }
 
 .chart-legend {
     display: flex;
     gap: 22px;
-    margin-top: 10px;
+    flex-wrap: wrap;
+    margin-top: 16px;
     font-weight: 600;
     color: #223660;
-    flex-wrap: wrap;
 }
 
 .legend-item {
@@ -347,11 +360,11 @@ html, body, [class*="css"] {
     border-radius: 3px;
 }
 
-/* ===== Pie decorativo ===== */
+/* Pie */
 .pie-wrap {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 
 .pie-chart {
@@ -360,13 +373,12 @@ html, body, [class*="css"] {
     border-radius: 50%;
     background: conic-gradient(#0a43bf 0deg 250deg, #f1a22b 250deg 360deg);
     position: relative;
-    box-shadow: inset 0 0 0 0 rgba(0,0,0,0.08);
 }
 
 .pie-chart::after {
     content: "";
     position: absolute;
-    inset: 38px;
+    inset: 42px;
     background: white;
     border-radius: 50%;
 }
@@ -377,25 +389,25 @@ html, body, [class*="css"] {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 2;
     font-size: 28px;
     font-weight: 800;
     color: #17326a;
-    z-index: 2;
 }
 
-/* ===== Actividad ===== */
+/* Activity */
 .activity-list {
-    margin: 0;
-    padding-left: 0;
     list-style: none;
+    padding-left: 0;
+    margin: 0;
     border-top: 1px solid #edf1f7;
 }
 
 .activity-list li {
     padding: 16px 0;
     border-bottom: 1px solid #edf1f7;
-    color: #273a60;
     font-size: 17px;
+    color: #27395f;
     line-height: 1.4;
 }
 
@@ -409,7 +421,7 @@ html, body, [class*="css"] {
     margin-right: 10px;
 }
 
-/* ===== Responsive ===== */
+/* Responsive */
 @media (max-width: 1100px) {
     .content-area {
         flex-direction: column;
@@ -437,26 +449,27 @@ html, body, [class*="css"] {
         grid-template-columns: 1fr;
     }
 
-    .table-header, .table-row {
+    .table-header,
+    .table-row {
         grid-template-columns: 1fr;
     }
 
     .topbar {
         flex-direction: column;
-        gap: 16px;
         align-items: flex-start;
+        gap: 16px;
+    }
+
+    .chart-layout {
+        grid-template-columns: 1fr;
     }
 }
 </style>
 """, unsafe_allow_html=True)
 
-# =========================
-# HTML PRINCIPAL
-# =========================
 st.markdown("""
 <div class="main-wrapper">
 
-    <!-- Header -->
     <div class="topbar">
         <div class="brand-section">
             <div class="brand-icon">📄</div>
@@ -476,10 +489,8 @@ st.markdown("""
         </div>
     </div>
 
-    <!-- Body -->
     <div class="content-area">
 
-        <!-- Sidebar -->
         <div class="left-menu">
             <div class="menu-header">🗂️ &nbsp; Panel Principal</div>
             <div class="menu-item">📅 &nbsp; Mis Licitaciones</div>
@@ -488,10 +499,8 @@ st.markdown("""
             <div class="menu-item">⚙️ &nbsp; Configuración</div>
         </div>
 
-        <!-- Main -->
         <div class="main-panel">
 
-            <!-- KPIs -->
             <div class="kpi-grid">
                 <div class="kpi-card blue-card">
                     <div class="kpi-icon">☑️</div>
@@ -501,7 +510,7 @@ st.markdown("""
                     </div>
                 </div>
 
-                <div class="kpi-card blue-card">
+                <div class="kpi-card blue-card-2">
                     <div class="kpi-icon">⚖️</div>
                     <div>
                         <div class="kpi-title">En Evaluación</div>
@@ -509,7 +518,7 @@ st.markdown("""
                     </div>
                 </div>
 
-                <div class="kpi-card blue-dark-card">
+                <div class="kpi-card orange-card">
                     <div class="kpi-icon">📁</div>
                     <div>
                         <div class="kpi-title">Adjudicadas</div>
@@ -526,7 +535,6 @@ st.markdown("""
                 </div>
             </div>
 
-            <!-- Tabla resumen -->
             <div class="white-box">
                 <div class="section-header">
                     <div class="section-title">Resumen de Licitaciones</div>
@@ -571,23 +579,22 @@ st.markdown("""
                 </div>
             </div>
 
-            <!-- Parte inferior -->
             <div class="bottom-grid">
 
                 <div class="white-box">
                     <div class="box-title">📊 Estadísticas</div>
 
-                    <div style="display:grid; grid-template-columns: 1.3fr 1fr; gap: 16px; align-items:center;">
+                    <div class="chart-layout">
                         <div>
                             <div class="chart-area">
-                                <div class="bar bar-blue" style="height: 150px;"></div>
-                                <div class="bar bar-blue2" style="height: 95px;"></div>
-                                <div class="bar bar-blue" style="height: 135px;"></div>
-                                <div class="bar bar-orange" style="height: 110px;"></div>
-                                <div class="bar bar-blue2" style="height: 105px;"></div>
-                                <div class="bar bar-blue3" style="height: 62px;"></div>
-                                <div class="bar bar-blue" style="height: 42px;"></div>
-                                <div class="bar bar-orange" style="height: 10px;"></div>
+                                <div class="bar bar-blue" style="height:150px;"></div>
+                                <div class="bar bar-blue2" style="height:95px;"></div>
+                                <div class="bar bar-blue" style="height:135px;"></div>
+                                <div class="bar bar-orange" style="height:110px;"></div>
+                                <div class="bar bar-blue2" style="height:105px;"></div>
+                                <div class="bar bar-blue3" style="height:62px;"></div>
+                                <div class="bar bar-blue" style="height:40px;"></div>
+                                <div class="bar bar-orange" style="height:12px;"></div>
                             </div>
 
                             <div class="chart-legend">
@@ -596,7 +603,7 @@ st.markdown("""
                                     <div>Propuestas Recibidas</div>
                                 </div>
                                 <div class="legend-item">
-                                    <div class="legend-color" style="background:#f1a22b;"></div>
+                                    <div class="legend-color" style="background:#ef9d24;"></div>
                                     <div>Adjudicaciones</div>
                                 </div>
                             </div>
