@@ -9,7 +9,7 @@ st.set_page_config(layout="wide")
 # =========================
 # CARGAR EXCEL
 # =========================
-df = pd.read_excel("APLICACION LICITACIONES.xlsx")
+df = pd.read_excel("data/APLICACION LICITACIONES.xlsx")
 
 # Limpiar nombres de columnas (MUY IMPORTANTE)
 df.columns = df.columns.str.strip()
