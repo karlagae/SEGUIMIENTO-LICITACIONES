@@ -123,8 +123,8 @@ html, body, [class*="css"] {
     width: 100%;
     max-width: 100%;
     margin: 0;
-    background: linear-gradient(180deg, #edf2fa 0%, #f8fbff 100%);
-    padding: 22px 22px 28px 22px;
+    background: transparent;
+    padding: 22px;
     border-radius: 0;
     box-shadow: none;
 }
