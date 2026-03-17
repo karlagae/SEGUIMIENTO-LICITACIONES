@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
 from pathlib import Path
 import html
@@ -10,7 +11,7 @@ st.set_page_config(
 )
 
 # =========================================
-# CONFIG GENERAL
+# ESTILO GENERAL STREAMLIT
 # =========================================
 st.markdown("""
 <style>
@@ -19,7 +20,7 @@ footer {visibility: hidden;}
 header {visibility: hidden;}
 
 .block-container {
-    padding-top: 0rem !important;
+    padding-top: 0.6rem !important;
     padding-bottom: 1rem !important;
     padding-left: 1.5rem !important;
     padding-right: 1.5rem !important;
@@ -39,7 +40,6 @@ archivo = Path(__file__).parent / "data" / "APLICACION LICITACIONES.xlsx"
 df = pd.read_excel(archivo)
 df.columns = df.columns.str.strip()
 
-# Renombrar columnas clave
 df = df.rename(columns={
     "NUMERO DE LA LICITACIÓN": "licitacion",
     "CONVOCANTE": "convocante",
@@ -52,7 +52,7 @@ df = df.rename(columns={
 })
 
 # =========================================
-# COLUMNAS DE FECHAS
+# FECHAS
 # =========================================
 fechas_cols = [
     "PUBLICACION",
@@ -69,11 +69,11 @@ for col in fechas_cols:
         df[col] = pd.to_datetime(df[col], errors="coerce")
 
 # =========================================
-# NORMALIZACIÓN DE TEXTO
+# LIMPIEZA TEXTO
 # =========================================
 for col in ["tipo", "convocante", "estado", "estatus", "resultado", "elaboro", "licitacion"]:
     if col in df.columns:
-        df[col] = df[col].astype(str).replace("nan", "").fillna("")
+        df[col] = df[col].fillna("").astype(str).str.strip()
 
 # =========================================
 # FILTROS
@@ -83,25 +83,25 @@ f1, f2, f3, f4 = st.columns(4)
 with f1:
     tipo_filtro = st.selectbox(
         "Tipo",
-        ["Todos"] + sorted([x for x in df["tipo"].dropna().unique().tolist() if str(x).strip() != ""])
+        ["Todos"] + sorted([x for x in df["tipo"].unique().tolist() if x != ""])
     )
 
 with f2:
     convocante_filtro = st.selectbox(
         "Convocante",
-        ["Todos"] + sorted([x for x in df["convocante"].dropna().unique().tolist() if str(x).strip() != ""])
+        ["Todos"] + sorted([x for x in df["convocante"].unique().tolist() if x != ""])
     )
 
 with f3:
     estado_filtro = st.selectbox(
         "Estado",
-        ["Todos"] + sorted([x for x in df["estado"].dropna().unique().tolist() if str(x).strip() != ""])
+        ["Todos"] + sorted([x for x in df["estado"].unique().tolist() if x != ""])
     )
 
 with f4:
     elaboro_filtro = st.selectbox(
         "Elaboró",
-        ["Todos"] + sorted([x for x in df["elaboro"].dropna().unique().tolist() if str(x).strip() != ""])
+        ["Todos"] + sorted([x for x in df["elaboro"].unique().tolist() if x != ""])
     )
 
 df_filtrado = df.copy()
@@ -119,7 +119,7 @@ if elaboro_filtro != "Todos":
     df_filtrado = df_filtrado[df_filtrado["elaboro"] == elaboro_filtro]
 
 # =========================================
-# FUNCIONES AUXILIARES
+# FUNCIONES
 # =========================================
 def limpiar(v):
     if pd.isna(v):
@@ -134,37 +134,40 @@ def formatear_fecha(v):
         return ""
     try:
         return pd.to_datetime(v).strftime("%d %b %Y")
-    except:
+    except Exception:
         return str(v)
 
 def detectar_en_curso(row):
+    extra = row.get("INFORMACIÓN DE GRAFICAS (RESULTADO)", "")
     texto = " ".join([
         limpiar(row.get("estatus", "")),
         limpiar(row.get("resultado", "")),
-        limpiar(row.get("INFORMACIÓN DE GRAFICAS (RESULTADO)", "")) if "INFORMACIÓN DE GRAFICAS (RESULTADO)" in row else ""
+        limpiar(extra)
     ]).upper()
 
     claves = ["CURSO", "PROCESO", "EVALUACION", "EVALUACIÓN", "ABIERTA", "ACTIVA", "VIGENTE"]
     return any(k in texto for k in claves)
 
 def detectar_ganada(row):
+    extra = row.get("INFORMACIÓN DE GRAFICAS (RESULTADO)", "")
     texto = " ".join([
         limpiar(row.get("resultado", "")),
-        limpiar(row.get("INFORMACIÓN DE GRAFICAS (RESULTADO)", "")) if "INFORMACIÓN DE GRAFICAS (RESULTADO)" in row else ""
+        limpiar(extra)
     ]).upper()
     return "GANAD" in texto or "ADJUDIC" in texto
 
 def detectar_perdida(row):
+    extra = row.get("INFORMACIÓN DE GRAFICAS (RESULTADO)", "")
     texto = " ".join([
         limpiar(row.get("resultado", "")),
-        limpiar(row.get("INFORMACIÓN DE GRAFICAS (RESULTADO)", "")) if "INFORMACIÓN DE GRAFICAS (RESULTADO)" in row else ""
+        limpiar(extra)
     ]).upper()
-    return "PERDID" in texto or "NO ADJUDIC" in texto or "DESECHAD" in texto
+    return "PERDID" in texto or "NO ADJUDIC" in texto or "DESECHAD" in texto or "CANCEL" in texto
 
 def badge_estado(row):
     estatus = limpiar(row.get("estatus", ""))
     resultado = limpiar(row.get("resultado", ""))
-    extra = limpiar(row.get("INFORMACIÓN DE GRAFICAS (RESULTADO)", "")) if "INFORMACIÓN DE GRAFICAS (RESULTADO)" in row else ""
+    extra = limpiar(row.get("INFORMACIÓN DE GRAFICAS (RESULTADO)", ""))
     texto = " ".join([estatus, resultado, extra]).upper()
 
     if "GANAD" in texto or "ADJUDIC" in texto:
@@ -192,7 +195,6 @@ perdidas = int(df_filtrado.apply(detectar_perdida, axis=1).sum())
 # =========================================
 df_tabla = df_filtrado.copy()
 
-# ordenar por fecha de fallo si existe, si no por publicación
 if "fallo" in df_tabla.columns:
     df_tabla = df_tabla.sort_values(by="fallo", ascending=True, na_position="last")
 elif "PUBLICACION" in df_tabla.columns:
@@ -205,21 +207,20 @@ filas_html = ""
 for _, row in df_tabla.iterrows():
     titulo = limpiar(row.get("licitacion", "")) or "Sin identificador"
     estado_badge, badge_class = badge_estado(row)
-    propuestas = limpiar(row.get("PRESENTAR COTIZACION", ""))
-    propuestas_txt = propuestas if propuestas else "-"
+    referencia = limpiar(row.get("tipo", "")) or "-"
     cierre = formatear_fecha(row.get("fallo", "")) if "fallo" in row else ""
 
     filas_html += f"""
     <div class="table-row">
         <div>{html.escape(titulo)}</div>
         <div><span class="status-pill {badge_class}">{html.escape(estado_badge)}</span></div>
-        <div>{html.escape(propuestas_txt)}</div>
+        <div>{html.escape(referencia)}</div>
         <div>{html.escape(cierre if cierre else "-")}</div>
     </div>
     """
 
 # =========================================
-# ACTIVIDADES PRÓXIMAS
+# ACTIVIDADES
 # =========================================
 actividades = []
 
@@ -236,11 +237,9 @@ for _, row in df_filtrado.iterrows():
 
 df_act = pd.DataFrame(actividades)
 
-if not df_act.empty:
-    df_act = df_act.dropna(subset=["fecha"]).sort_values("fecha").head(5)
-
 actividad_html = ""
 if not df_act.empty:
+    df_act = df_act.dropna(subset=["fecha"]).sort_values("fecha").head(5)
     for _, row in df_act.iterrows():
         actividad_html += f"""
         <li><span class="dot">●</span>{html.escape(row['evento'])}: “{html.escape(row['licitacion'])}” — {row['fecha'].strftime('%d %b %Y')}</li>
@@ -274,437 +273,449 @@ else:
     bars_html = '<div class="bar bar-blue" style="height:20px;"></div>'
 
 # =========================================
-# HTML DEL DASHBOARD
+# HTML COMPLETO
 # =========================================
 dashboard_html = f"""
-<div class="main-wrapper">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    * {{
+        box-sizing: border-box;
+        font-family: "Segoe UI", sans-serif;
+    }}
 
-    <style>
-        * {{
-            box-sizing: border-box;
-            font-family: "Segoe UI", sans-serif;
-        }}
+    body {{
+        margin: 0;
+        padding: 0;
+        background: transparent;
+    }}
 
-        .main-wrapper {{
-            max-width: 1320px;
-            margin: 18px auto 30px auto;
-            background: #f4f7fb;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 18px 34px rgba(0,0,0,0.18);
-        }}
+    .main-wrapper {{
+        max-width: 1320px;
+        margin: 18px auto 30px auto;
+        background: #f4f7fb;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 18px 34px rgba(0,0,0,0.18);
+    }}
 
-        .topbar {{
-            background: linear-gradient(90deg, #1c248b 0%, #2738b2 100%);
-            color: white;
-            padding: 24px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }}
+    .topbar {{
+        background: linear-gradient(90deg, #1c248b 0%, #2738b2 100%);
+        color: white;
+        padding: 24px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }}
 
-        .brand-section {{
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }}
+    .brand-section {{
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }}
 
-        .brand-icon {{
-            font-size: 34px;
-        }}
+    .brand-icon {{
+        font-size: 34px;
+    }}
 
-        .brand-title {{
-            font-size: 21px;
-            font-weight: 800;
-            line-height: 1.05;
-        }}
+    .brand-title {{
+        font-size: 21px;
+        font-weight: 800;
+        line-height: 1.05;
+    }}
 
-        .nav-center {{
-            display: flex;
-            gap: 34px;
-            align-items: center;
-        }}
+    .nav-center {{
+        display: flex;
+        gap: 34px;
+        align-items: center;
+    }}
 
-        .nav-item {{
-            font-size: 17px;
-            font-weight: 600;
-            position: relative;
-            opacity: 0.96;
-        }}
+    .nav-item {{
+        font-size: 17px;
+        font-weight: 600;
+        position: relative;
+        opacity: 0.96;
+    }}
 
-        .nav-item.active::after {{
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -9px;
-            width: 100%;
-            height: 2px;
-            background: #e87222;
-            border-radius: 10px;
-        }}
+    .nav-item.active::after {{
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -9px;
+        width: 100%;
+        height: 2px;
+        background: #e87222;
+        border-radius: 10px;
+    }}
 
-        .nav-right {{
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            font-size: 16px;
-            font-weight: 600;
-        }}
+    .nav-right {{
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-size: 16px;
+        font-weight: 600;
+    }}
 
-        .user-badge {{
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: #f6d8c2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid rgba(255,255,255,0.65);
-        }}
+    .user-badge {{
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #f6d8c2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid rgba(255,255,255,0.65);
+    }}
 
+    .content-area {{
+        display: flex;
+        gap: 24px;
+        padding: 24px;
+        align-items: flex-start;
+        background: linear-gradient(180deg, #edf2fa 0%, #f8fbff 100%);
+    }}
+
+    .left-menu {{
+        width: 240px;
+        background: white;
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid #e6edf6;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        flex-shrink: 0;
+    }}
+
+    .menu-header {{
+        background: #232a91;
+        color: white;
+        font-weight: 800;
+        padding: 18px 18px;
+        font-size: 18px;
+    }}
+
+    .menu-item {{
+        padding: 16px 18px;
+        font-size: 17px;
+        color: #21355e;
+        border-bottom: 1px solid #edf1f7;
+        background: white;
+    }}
+
+    .menu-item:last-child {{
+        border-bottom: none;
+    }}
+
+    .main-panel {{
+        flex: 1;
+    }}
+
+    .kpi-grid {{
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-bottom: 22px;
+    }}
+
+    .kpi-card {{
+        color: white;
+        border-radius: 14px;
+        padding: 18px 20px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-height: 92px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.14);
+    }}
+
+    .blue-card {{
+        background: linear-gradient(90deg, #2d4de2 0%, #3d59d3 100%);
+    }}
+
+    .blue-card-2 {{
+        background: linear-gradient(90deg, #2e43d4 0%, #4052d7 100%);
+    }}
+
+    .orange-card {{
+        background: linear-gradient(90deg, #e87222 0%, #f0b349 100%);
+    }}
+
+    .navy-card {{
+        background: linear-gradient(90deg, #141414 0%, #232a74 100%);
+    }}
+
+    .kpi-icon {{
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.14);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 23px;
+    }}
+
+    .kpi-title {{
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }}
+
+    .kpi-value {{
+        font-size: 24px;
+        font-weight: 800;
+    }}
+
+    .white-box {{
+        background: white;
+        border-radius: 14px;
+        padding: 22px;
+        box-shadow: 0 5px 16px rgba(0,0,0,0.07);
+        border: 1px solid #e9eef6;
+    }}
+
+    .section-header {{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 18px;
+    }}
+
+    .section-title {{
+        font-size: 22px;
+        font-weight: 800;
+        color: #17326a;
+    }}
+
+    .small-btn {{
+        border: 1px solid #d6deea;
+        background: white;
+        color: #30466f;
+        padding: 9px 18px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 15px;
+    }}
+
+    .table-wrap {{
+        border: 1px solid #edf2f8;
+        border-radius: 10px;
+        overflow: hidden;
+    }}
+
+    .table-header,
+    .table-row {{
+        display: grid;
+        grid-template-columns: 2.3fr 1.2fr 1fr 1fr;
+        align-items: center;
+    }}
+
+    .table-header {{
+        background: #eff4fa;
+        color: #30415f;
+        font-weight: 700;
+        font-size: 16px;
+    }}
+
+    .table-header div,
+    .table-row div {{
+        padding: 15px 18px;
+    }}
+
+    .table-row {{
+        border-top: 1px solid #edf1f7;
+        color: #27395f;
+        background: white;
+        font-size: 16px;
+    }}
+
+    .status-pill {{
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 8px;
+        color: white;
+        font-size: 14px;
+        font-weight: 700;
+    }}
+
+    .pill-blue {{ background: #2f53d8; }}
+    .pill-blue2 {{ background: #3950b9; }}
+    .pill-orange {{ background: #e8a035; }}
+    .pill-orange2 {{ background: #d88c27; }}
+    .pill-navy {{ background: #111111; }}
+    .pill-gray {{ background: #7b88a5; }}
+
+    .bottom-grid {{
+        display: grid;
+        grid-template-columns: 1.35fr 1fr;
+        gap: 22px;
+        margin-top: 22px;
+    }}
+
+    .box-title {{
+        font-size: 20px;
+        font-weight: 800;
+        color: #17326a;
+        margin-bottom: 12px;
+    }}
+
+    .chart-layout {{
+        display: grid;
+        grid-template-columns: 1.35fr 1fr;
+        gap: 10px;
+        align-items: center;
+    }}
+
+    .chart-area {{
+        height: 250px;
+        display: flex;
+        align-items: flex-end;
+        gap: 12px;
+        padding: 10px 8px 0 8px;
+        border-top: 1px solid #edf1f7;
+        margin-top: 8px;
+    }}
+
+    .bar {{
+        width: 38px;
+        border-radius: 8px 8px 0 0;
+    }}
+
+    .bar-blue {{ background: #2d4de2; }}
+    .bar-blue2 {{ background: #4155c9; }}
+    .bar-blue3 {{ background: #8ca0ea; }}
+    .bar-orange {{ background: #e87222; }}
+    .bar-orange2 {{ background: #f0b349; }}
+    .bar-navy {{ background: #111111; }}
+
+    .chart-legend {{
+        display: flex;
+        gap: 22px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+        font-weight: 600;
+        color: #223660;
+    }}
+
+    .legend-item {{
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }}
+
+    .legend-color {{
+        width: 14px;
+        height: 14px;
+        border-radius: 3px;
+    }}
+
+    .pie-wrap {{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }}
+
+    .pie-chart {{
+        width: 170px;
+        height: 170px;
+        border-radius: 50%;
+        background: conic-gradient(#2d4de2 0deg 220deg, #e87222 220deg 320deg, #111111 320deg 360deg);
+        position: relative;
+    }}
+
+    .pie-chart::after {{
+        content: "";
+        position: absolute;
+        inset: 42px;
+        background: white;
+        border-radius: 50%;
+    }}
+
+    .pie-center {{
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        font-size: 28px;
+        font-weight: 800;
+        color: #17326a;
+    }}
+
+    .activity-list {{
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+        border-top: 1px solid #edf1f7;
+    }}
+
+    .activity-list li {{
+        padding: 16px 0;
+        border-bottom: 1px solid #edf1f7;
+        font-size: 17px;
+        color: #27395f;
+        line-height: 1.4;
+    }}
+
+    .activity-list li:last-child {{
+        border-bottom: none;
+    }}
+
+    .dot {{
+        color: #2d4de2;
+        font-weight: 900;
+        margin-right: 10px;
+    }}
+
+    @media (max-width: 1100px) {{
         .content-area {{
-            display: flex;
-            gap: 24px;
-            padding: 24px;
-            align-items: flex-start;
-            background: linear-gradient(180deg, #edf2fa 0%, #f8fbff 100%);
+            flex-direction: column;
         }}
 
         .left-menu {{
-            width: 240px;
-            background: white;
-            border-radius: 14px;
-            overflow: hidden;
-            border: 1px solid #e6edf6;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-            flex-shrink: 0;
-        }}
-
-        .menu-header {{
-            background: #232a91;
-            color: white;
-            font-weight: 800;
-            padding: 18px 18px;
-            font-size: 18px;
-        }}
-
-        .menu-item {{
-            padding: 16px 18px;
-            font-size: 17px;
-            color: #21355e;
-            border-bottom: 1px solid #edf1f7;
-            background: white;
-        }}
-
-        .menu-item:last-child {{
-            border-bottom: none;
-        }}
-
-        .main-panel {{
-            flex: 1;
+            width: 100%;
         }}
 
         .kpi-grid {{
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-            margin-bottom: 22px;
+            grid-template-columns: repeat(2, 1fr);
         }}
 
-        .kpi-card {{
-            color: white;
-            border-radius: 14px;
-            padding: 18px 20px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            min-height: 92px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.14);
+        .bottom-grid {{
+            grid-template-columns: 1fr;
         }}
 
-        .blue-card {{
-            background: linear-gradient(90deg, #2d4de2 0%, #3d59d3 100%);
+        .nav-center {{
+            display: none;
         }}
+    }}
 
-        .blue-card-2 {{
-            background: linear-gradient(90deg, #2e43d4 0%, #4052d7 100%);
-        }}
-
-        .orange-card {{
-            background: linear-gradient(90deg, #e87222 0%, #f0b349 100%);
-        }}
-
-        .navy-card {{
-            background: linear-gradient(90deg, #141414 0%, #232a74 100%);
-        }}
-
-        .kpi-icon {{
-            width: 46px;
-            height: 46px;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.14);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 23px;
-        }}
-
-        .kpi-title {{
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }}
-
-        .kpi-value {{
-            font-size: 24px;
-            font-weight: 800;
-        }}
-
-        .white-box {{
-            background: white;
-            border-radius: 14px;
-            padding: 22px;
-            box-shadow: 0 5px 16px rgba(0,0,0,0.07);
-            border: 1px solid #e9eef6;
-        }}
-
-        .section-header {{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-        }}
-
-        .section-title {{
-            font-size: 22px;
-            font-weight: 800;
-            color: #17326a;
-        }}
-
-        .small-btn {{
-            border: 1px solid #d6deea;
-            background: white;
-            color: #30466f;
-            padding: 9px 18px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 15px;
-        }}
-
-        .table-wrap {{
-            border: 1px solid #edf2f8;
-            border-radius: 10px;
-            overflow: hidden;
+    @media (max-width: 700px) {{
+        .kpi-grid {{
+            grid-template-columns: 1fr;
         }}
 
         .table-header,
         .table-row {{
-            display: grid;
-            grid-template-columns: 2.3fr 1.2fr 1fr 1fr;
-            align-items: center;
+            grid-template-columns: 1fr;
         }}
 
-        .table-header {{
-            background: #eff4fa;
-            color: #30415f;
-            font-weight: 700;
-            font-size: 16px;
-        }}
-
-        .table-header div,
-        .table-row div {{
-            padding: 15px 18px;
-        }}
-
-        .table-row {{
-            border-top: 1px solid #edf1f7;
-            color: #27395f;
-            background: white;
-            font-size: 16px;
-        }}
-
-        .status-pill {{
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 8px;
-            color: white;
-            font-size: 14px;
-            font-weight: 700;
-        }}
-
-        .pill-blue {{ background: #2f53d8; }}
-        .pill-blue2 {{ background: #3950b9; }}
-        .pill-orange {{ background: #e8a035; }}
-        .pill-orange2 {{ background: #d88c27; }}
-        .pill-navy {{ background: #111111; }}
-        .pill-gray {{ background: #7b88a5; }}
-
-        .bottom-grid {{
-            display: grid;
-            grid-template-columns: 1.35fr 1fr;
-            gap: 22px;
-            margin-top: 22px;
-        }}
-
-        .box-title {{
-            font-size: 20px;
-            font-weight: 800;
-            color: #17326a;
-            margin-bottom: 12px;
+        .topbar {{
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
         }}
 
         .chart-layout {{
-            display: grid;
-            grid-template-columns: 1.35fr 1fr;
-            gap: 10px;
-            align-items: center;
+            grid-template-columns: 1fr;
         }}
-
-        .chart-area {{
-            height: 250px;
-            display: flex;
-            align-items: flex-end;
-            gap: 12px;
-            padding: 10px 8px 0 8px;
-            border-top: 1px solid #edf1f7;
-            margin-top: 8px;
-        }}
-
-        .bar {{
-            width: 38px;
-            border-radius: 8px 8px 0 0;
-        }}
-
-        .bar-blue {{ background: #2d4de2; }}
-        .bar-blue2 {{ background: #4155c9; }}
-        .bar-blue3 {{ background: #8ca0ea; }}
-        .bar-orange {{ background: #e87222; }}
-        .bar-orange2 {{ background: #f0b349; }}
-        .bar-navy {{ background: #111111; }}
-
-        .chart-legend {{
-            display: flex;
-            gap: 22px;
-            flex-wrap: wrap;
-            margin-top: 16px;
-            font-weight: 600;
-            color: #223660;
-        }}
-
-        .legend-item {{
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }}
-
-        .legend-color {{
-            width: 14px;
-            height: 14px;
-            border-radius: 3px;
-        }}
-
-        .pie-wrap {{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }}
-
-        .pie-chart {{
-            width: 170px;
-            height: 170px;
-            border-radius: 50%;
-            background: conic-gradient(#2d4de2 0deg 220deg, #e87222 220deg 320deg, #111111 320deg 360deg);
-            position: relative;
-        }}
-
-        .pie-chart::after {{
-            content: "";
-            position: absolute;
-            inset: 42px;
-            background: white;
-            border-radius: 50%;
-        }}
-
-        .pie-center {{
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2;
-            font-size: 28px;
-            font-weight: 800;
-            color: #17326a;
-        }}
-
-        .activity-list {{
-            list-style: none;
-            padding-left: 0;
-            margin: 0;
-            border-top: 1px solid #edf1f7;
-        }}
-
-        .activity-list li {{
-            padding: 16px 0;
-            border-bottom: 1px solid #edf1f7;
-            font-size: 17px;
-            color: #27395f;
-            line-height: 1.4;
-        }}
-
-        .activity-list li:last-child {{
-            border-bottom: none;
-        }}
-
-        .dot {{
-            color: #2d4de2;
-            font-weight: 900;
-            margin-right: 10px;
-        }}
-
-        @media (max-width: 1100px) {{
-            .content-area {{
-                flex-direction: column;
-            }}
-
-            .left-menu {{
-                width: 100%;
-            }}
-
-            .kpi-grid {{
-                grid-template-columns: repeat(2, 1fr);
-            }}
-
-            .bottom-grid {{
-                grid-template-columns: 1fr;
-            }}
-
-            .nav-center {{
-                display: none;
-            }}
-        }}
-
-        @media (max-width: 700px) {{
-            .kpi-grid {{
-                grid-template-columns: 1fr;
-            }}
-
-            .table-header,
-            .table-row {{
-                grid-template-columns: 1fr;
-            }}
-
-            .topbar {{
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 16px;
-            }}
-
-            .chart-layout {{
-                grid-template-columns: 1fr;
-            }}
-        }}
-    </style>
+    }}
+</style>
+</head>
+<body>
+<div class="main-wrapper">
 
     <div class="topbar">
         <div class="brand-section">
@@ -835,12 +846,14 @@ dashboard_html = f"""
         </div>
     </div>
 </div>
+</body>
+</html>
 """
 
-st.markdown(dashboard_html, unsafe_allow_html=True)
+components.html(dashboard_html, height=1050, scrolling=True)
 
 # =========================================
-# TABLA DETALLADA ABAJO
+# DETALLE OPCIONAL
 # =========================================
 with st.expander("Ver tabla detallada"):
     columnas_mostrar = [
