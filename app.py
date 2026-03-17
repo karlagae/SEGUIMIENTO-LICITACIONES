@@ -38,16 +38,25 @@ html, body, [class*="css"] {
 }
 
 .topbar {
-    max-width: 1380px;
-    margin: 16px auto 0 auto;
-    background: linear-gradient(90deg, #1c248b 0%, #2738b2 100%);
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    background: linear-gradient(90deg, #032a84 0%, #0b47c2 100%);
     color: white;
-    border-radius: 20px 20px 0 0;
-    padding: 24px 28px;
+    border-radius: 0;
+    padding: 22px 34px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 18px 36px rgba(0,0,0,0.18);
+    box-shadow: none;
+}
+
+
+.main-shell {
+    width: 100%;
+    max-width: 1460px;
+    margin: 14px auto 24px auto;
+    overflow: hidden;
 }
 
 .brand-wrap {
@@ -111,12 +120,13 @@ html, body, [class*="css"] {
 }
 
 .dashboard-body {
-    max-width: 1380px;
-    margin: 0 auto 28px auto;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
     background: linear-gradient(180deg, #edf2fa 0%, #f8fbff 100%);
-    padding: 22px;
-    border-radius: 0 0 20px 20px;
-    box-shadow: 0 18px 36px rgba(0,0,0,0.18);
+    padding: 22px 22px 28px 22px;
+    border-radius: 0;
+    box-shadow: none;
 }
 
 div[data-testid="stSelectbox"] > label {
@@ -455,6 +465,11 @@ def badge_estado(row):
     return "Sin estatus", "pill-gray"
 
 # =========================================
+
+
+st.markdown('<div class="main-shell">', unsafe_allow_html=True)
+
+
 # HEADER
 # =========================================
 st.markdown("""
@@ -720,3 +735,8 @@ with st.expander("Ver actividades detalladas"):
         st.dataframe(df_act, use_container_width=True)
     else:
         st.info("No hay actividades registradas.")
+
+
+
+st.markdown("</div>", unsafe_allow_html=True)  # dashboard-body
+st.markdown("</div>", unsafe_allow_html=True)  # main-shell
