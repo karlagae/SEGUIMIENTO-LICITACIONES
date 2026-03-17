@@ -37,7 +37,6 @@ html, body, [class*="css"] {
     font-family: "Segoe UI", sans-serif;
 }
 
-/* ===== Header ===== */
 .topbar {
     max-width: 1380px;
     margin: 16px auto 0 auto;
@@ -111,7 +110,6 @@ html, body, [class*="css"] {
     border: 2px solid rgba(255,255,255,0.65);
 }
 
-/* ===== Wrapper blanco ===== */
 .dashboard-body {
     max-width: 1380px;
     margin: 0 auto 28px auto;
@@ -121,7 +119,6 @@ html, body, [class*="css"] {
     box-shadow: 0 18px 36px rgba(0,0,0,0.18);
 }
 
-/* ===== Filtros ===== */
 div[data-testid="stSelectbox"] > label {
     color: #ffffff !important;
     font-weight: 700 !important;
@@ -141,7 +138,6 @@ div[data-testid="stSelectbox"] [data-baseweb="select"] span {
     font-size: 16px !important;
 }
 
-/* ===== KPI Cards ===== */
 .kpi-card {
     border-radius: 16px;
     padding: 18px 20px;
@@ -195,7 +191,6 @@ div[data-testid="stSelectbox"] [data-baseweb="select"] span {
     margin-top: 6px;
 }
 
-/* ===== White box ===== */
 .white-box {
     background: white;
     border-radius: 16px;
@@ -222,7 +217,6 @@ div[data-testid="stSelectbox"] [data-baseweb="select"] span {
     text-align: center;
 }
 
-/* ===== Tabla resumen ===== */
 .table-wrap {
     border: 1px solid #edf2f8;
     border-radius: 10px;
@@ -269,7 +263,6 @@ div[data-testid="stSelectbox"] [data-baseweb="select"] span {
 .pill-navy { background: #111111; }
 .pill-gray { background: #7b88a5; }
 
-/* ===== Stats/Activity ===== */
 .stat-card {
     background: white;
     border-radius: 16px;
@@ -380,9 +373,6 @@ df = df.rename(columns={
     "FALLO": "fallo"
 })
 
-# =========================================
-# LIMPIEZA / FECHAS
-# =========================================
 fechas_cols = [
     "PUBLICACION",
     "ENVIO DE PREGUNTAS",
@@ -469,27 +459,27 @@ def badge_estado(row):
 # =========================================
 st.markdown("""
 <div class="topbar">
-    <div class="brand-wrap">
-        <div class="brand-icon">📄</div>
-        <div class="brand-title">Panel de<br>Oportunidades</div>
-    </div>
+<div class="brand-wrap">
+<div class="brand-icon">📄</div>
+<div class="brand-title">Panel de<br>Oportunidades</div>
+</div>
 
-    <div class="nav-wrap">
-        <div class="nav-item active">Inicio</div>
-        <div class="nav-item">Procesos</div>
-        <div class="nav-item">Reportes</div>
-    </div>
+<div class="nav-wrap">
+<div class="nav-item active">Inicio</div>
+<div class="nav-item">Procesos</div>
+<div class="nav-item">Reportes</div>
+</div>
 
-    <div class="user-wrap">
-        <div>🔔 Notificaciones</div>
-        <div class="user-badge">👩🏻</div>
-        <div>Usuario ▾</div>
-    </div>
+<div class="user-wrap">
+<div>🔔 Notificaciones</div>
+<div class="user-badge">👩🏻</div>
+<div>Usuario ▾</div>
+</div>
 </div>
 """, unsafe_allow_html=True)
 
 # =========================================
-# ABRIR WRAPPER BLANCO
+# ABRIR CUERPO
 # =========================================
 st.markdown('<div class="dashboard-body">', unsafe_allow_html=True)
 
@@ -499,31 +489,18 @@ st.markdown('<div class="dashboard-body">', unsafe_allow_html=True)
 f1, f2, f3, f4 = st.columns(4)
 
 with f1:
-    tipo_filtro = st.selectbox(
-        "Tipo",
-        ["Todos"] + sorted([x for x in df["tipo"].unique().tolist() if x != ""])
-    )
+    tipo_filtro = st.selectbox("Tipo", ["Todos"] + sorted([x for x in df["tipo"].unique().tolist() if x != ""]))
 
 with f2:
-    convocante_filtro = st.selectbox(
-        "Convocante",
-        ["Todos"] + sorted([x for x in df["convocante"].unique().tolist() if x != ""])
-    )
+    convocante_filtro = st.selectbox("Convocante", ["Todos"] + sorted([x for x in df["convocante"].unique().tolist() if x != ""]))
 
 with f3:
-    estado_filtro = st.selectbox(
-        "Estado",
-        ["Todos"] + sorted([x for x in df["estado"].unique().tolist() if x != ""])
-    )
+    estado_filtro = st.selectbox("Estado", ["Todos"] + sorted([x for x in df["estado"].unique().tolist() if x != ""]))
 
 with f4:
-    elaboro_filtro = st.selectbox(
-        "Elaboró",
-        ["Todos"] + sorted([x for x in df["elaboro"].unique().tolist() if x != ""])
-    )
+    elaboro_filtro = st.selectbox("Elaboró", ["Todos"] + sorted([x for x in df["elaboro"].unique().tolist() if x != ""]))
 
 df_filtrado = df.copy()
-
 if tipo_filtro != "Todos":
     df_filtrado = df_filtrado[df_filtrado["tipo"] == tipo_filtro]
 if convocante_filtro != "Todos":
@@ -547,47 +524,47 @@ k1, k2, k3, k4 = st.columns(4)
 
 with k1:
     st.markdown(f"""
-    <div class="kpi-card kpi-blue">
-        <div class="kpi-top">
-            <div class="kpi-icon">☑️</div>
-            <div class="kpi-title">Procesos Totales</div>
-        </div>
-        <div class="kpi-value">{procesos_totales}</div>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="kpi-card kpi-blue">
+<div class="kpi-top">
+<div class="kpi-icon">☑️</div>
+<div class="kpi-title">Procesos Totales</div>
+</div>
+<div class="kpi-value">{procesos_totales}</div>
+</div>
+""", unsafe_allow_html=True)
 
 with k2:
     st.markdown(f"""
-    <div class="kpi-card kpi-blue2">
-        <div class="kpi-top">
-            <div class="kpi-icon">⚖️</div>
-            <div class="kpi-title">En Curso</div>
-        </div>
-        <div class="kpi-value">{en_curso}</div>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="kpi-card kpi-blue2">
+<div class="kpi-top">
+<div class="kpi-icon">⚖️</div>
+<div class="kpi-title">En Curso</div>
+</div>
+<div class="kpi-value">{en_curso}</div>
+</div>
+""", unsafe_allow_html=True)
 
 with k3:
     st.markdown(f"""
-    <div class="kpi-card kpi-orange">
-        <div class="kpi-top">
-            <div class="kpi-icon">📁</div>
-            <div class="kpi-title">Ganadas</div>
-        </div>
-        <div class="kpi-value">{ganadas}</div>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="kpi-card kpi-orange">
+<div class="kpi-top">
+<div class="kpi-icon">📁</div>
+<div class="kpi-title">Ganadas</div>
+</div>
+<div class="kpi-value">{ganadas}</div>
+</div>
+""", unsafe_allow_html=True)
 
 with k4:
     st.markdown(f"""
-    <div class="kpi-card kpi-navy">
-        <div class="kpi-top">
-            <div class="kpi-icon">➖</div>
-            <div class="kpi-title">Perdidas</div>
-        </div>
-        <div class="kpi-value">{perdidas}</div>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="kpi-card kpi-navy">
+<div class="kpi-top">
+<div class="kpi-icon">➖</div>
+<div class="kpi-title">Perdidas</div>
+</div>
+<div class="kpi-value">{perdidas}</div>
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("<div style='height:22px'></div>", unsafe_allow_html=True)
 
@@ -595,7 +572,6 @@ st.markdown("<div style='height:22px'></div>", unsafe_allow_html=True)
 # TABLA RESUMEN
 # =========================================
 df_tabla = df_filtrado.copy()
-
 if "fallo" in df_tabla.columns:
     df_tabla = df_tabla.sort_values(by="fallo", ascending=True, na_position="last")
 elif "PUBLICACION" in df_tabla.columns:
@@ -611,33 +587,32 @@ for _, row in df_tabla.iterrows():
     cierre = ihtml.escape(formatear_fecha(row.get("fallo", "")))
 
     filas_html += f"""
-    <div class="table-row">
-        <div>{titulo}</div>
-        <div><span class="status-pill {badge_class}">{estado_badge}</span></div>
-        <div>{referencia}</div>
-        <div>{cierre}</div>
-    </div>
-    """
-
-tabla_html = f"""
-<div class="white-box">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
-        <div class="section-title" style="margin-bottom:0;">Resumen de Oportunidades</div>
-        <div class="mini-btn">Vista actual</div>
-    </div>
-
-    <div class="table-wrap">
-        <div class="table-header">
-            <div>Proceso</div>
-            <div>Estado</div>
-            <div>Referencia</div>
-            <div>Cierre</div>
-        </div>
-        {filas_html}
-    </div>
+<div class="table-row">
+<div>{titulo}</div>
+<div><span class="status-pill {badge_class}">{estado_badge}</span></div>
+<div>{referencia}</div>
+<div>{cierre}</div>
 </div>
 """
-st.markdown(tabla_html, unsafe_allow_html=True)
+
+st.markdown(f"""
+<div class="white-box">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+<div class="section-title" style="margin-bottom:0;">Resumen de Oportunidades</div>
+<div class="mini-btn">Vista actual</div>
+</div>
+
+<div class="table-wrap">
+<div class="table-header">
+<div>Proceso</div>
+<div>Estado</div>
+<div>Referencia</div>
+<div>Cierre</div>
+</div>
+{filas_html}
+</div>
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("<div style='height:22px'></div>", unsafe_allow_html=True)
 
@@ -694,43 +669,41 @@ else:
 c1, c2 = st.columns([1.35, 1])
 
 with c1:
-    stats_html = f"""
-    <div class="stat-card">
-        <div class="stat-title">📊 Estadísticas</div>
-        <div class="bar-zone">
-            {bars_html}
-        </div>
-        <div class="legend-row">
-            <div class="legend-item">
-                <div class="legend-color" style="background:#2d4de2;"></div>
-                <div>Procesos por tipo</div>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background:#e87222;"></div>
-                <div>Enfoque Werfen</div>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background:#111111;"></div>
-                <div>Cierre</div>
-            </div>
-        </div>
-    </div>
-    """
-    st.markdown(stats_html, unsafe_allow_html=True)
+    st.markdown(f"""
+<div class="stat-card">
+<div class="stat-title">📊 Estadísticas</div>
+<div class="bar-zone">
+{bars_html}
+</div>
+<div class="legend-row">
+<div class="legend-item">
+<div class="legend-color" style="background:#2d4de2;"></div>
+<div>Procesos por tipo</div>
+</div>
+<div class="legend-item">
+<div class="legend-color" style="background:#e87222;"></div>
+<div>Enfoque Werfen</div>
+</div>
+<div class="legend-item">
+<div class="legend-color" style="background:#111111;"></div>
+<div>Cierre</div>
+</div>
+</div>
+</div>
+""", unsafe_allow_html=True)
 
 with c2:
-    activity_html = f"""
-    <div class="stat-card">
-        <div class="stat-title">Última Actividad</div>
-        <ul class="activity-list">
-            {actividad_items}
-        </ul>
-    </div>
-    """
-    st.markdown(activity_html, unsafe_allow_html=True)
+    st.markdown(f"""
+<div class="stat-card">
+<div class="stat-title">Última Actividad</div>
+<ul class="activity-list">
+{actividad_items}
+</ul>
+</div>
+""", unsafe_allow_html=True)
 
 # =========================================
-# CERRAR WRAPPER BLANCO
+# CERRAR CUERPO
 # =========================================
 st.markdown("</div>", unsafe_allow_html=True)
 
@@ -738,10 +711,7 @@ st.markdown("</div>", unsafe_allow_html=True)
 # DETALLE OPCIONAL
 # =========================================
 with st.expander("Ver tabla detallada"):
-    columnas_mostrar = [
-        "tipo", "licitacion", "convocante", "estado",
-        "estatus", "resultado", "fallo", "elaboro"
-    ]
+    columnas_mostrar = ["tipo", "licitacion", "convocante", "estado", "estatus", "resultado", "fallo", "elaboro"]
     columnas_existentes = [c for c in columnas_mostrar if c in df_filtrado.columns]
     st.dataframe(df_filtrado[columnas_existentes], use_container_width=True)
 
