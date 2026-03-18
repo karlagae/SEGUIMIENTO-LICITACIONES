@@ -11,7 +11,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
-
+st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
 # =========================================
 # CSS GENERAL
 # =========================================
@@ -28,7 +28,7 @@ footer {visibility: hidden;}
 header {visibility: hidden;}
 
 
-st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
+
 
 .filters-box {
     background: #f1f3f7;
