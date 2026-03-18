@@ -706,7 +706,7 @@ st.markdown(f"""
 <div class="white-box">
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
 <div class="section-title" style="margin-bottom:0;">Resumen de Oportunidades</div>
-<div class="mini-btn">Vista actual</div>
+
 </div>
 
 <div class="table-wrap">
