@@ -716,7 +716,7 @@ for _, row in df_tabla.iterrows():
 
     filas_html += f"""
 <div class="table-row">
-<div>{titulo}</div>
+
 <div><span class="status-pill {badge_class}">{estado_badge}</span></div>
 <div>{referencia}</div>
 <div>{cierre}</div>
