@@ -435,11 +435,19 @@ df = df.rename(columns={
     "CONVOCANTE": "convocante",
     "ESTADO": "estado",
     "TIPO": "tipo",
-    "ESTATUS DE LA LICITACION": "estatus",
-    "GANADA / PERDIDA": "resultado",
+    "ESPECIALIDAD": "especialidad",
     "DISTRIBUIDOR ACTUAL": "integrador",
-    "FALLO": "fallo"
+    "JUNTA ACLARACIONES": "junta_aclaraciones",
+    "PRESENT. TECNICA": "present_tecnica",
+    "FALLO": "fallo",
+    "ESTATUS DE LA LICITACION": "estatus",
+    "GANADA / PERDIDA": "resultado"
 })
+
+
+
+
+
 
 fechas_cols = [
     "PUBLICACION",
@@ -451,13 +459,31 @@ fechas_cols = [
     "VIGENCIA LICITACION TERMINO"
 ]
 
+
+
+
+
+
 for col in fechas_cols:
     if col in df.columns:
         df[col] = pd.to_datetime(df[col], errors="coerce")
 
-for col in ["tipo", "convocante", "estado", "estatus", "resultado", "integrador", "licitacion"]:
+for col in ["tipo", "licitacion", "especialidad", "convocante", "integrador", "estado", "estatus", "resultado", "present_tecnica"]:
     if col in df.columns:
         df[col] = df[col].fillna("").astype(str).str.strip()
+
+
+
+
+
+# =========================================
+# FORMATO DE FECHAS (AQUÍ VA LO QUE NO SABÍAS)
+# =========================================
+if "junta_aclaraciones" in df.columns:
+    df["junta_aclaraciones"] = pd.to_datetime(df["junta_aclaraciones"], errors="coerce")
+
+if "fallo" in df.columns:
+    df["fallo"] = pd.to_datetime(df["fallo"], errors="coerce")
 
 # =========================================
 # FUNCIONES
