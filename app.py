@@ -100,7 +100,7 @@ div[data-testid="stSelectbox"] span {
 }
 
 .stApp {
-    background: linear-gradient(180deg, #16004a 0%, #2a1393 100%);
+    background: linear-gradient(180deg, #06038D 0%, #0a0f5c 100%);
 }
 
 html, body, [class*="css"] {
