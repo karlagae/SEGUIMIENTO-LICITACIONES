@@ -449,28 +449,7 @@ df = df.rename(columns={
 
 
 
-fechas_cols = [
-    "PUBLICACION",
-    "ENVIO DE PREGUNTAS",
-    "JUNTA ACLARACIONES",
-    "PROPUESTA ECONOMICA",
-    "FALLO",
-    "VIGENCIA LICITACION INICIO",
-    "VIGENCIA LICITACION TERMINO"
-]
 
-
-
-
-
-
-for col in fechas_cols:
-    if col in df.columns:
-        df[col] = pd.to_datetime(df[col], errors="coerce")
-
-for col in ["tipo", "licitacion", "especialidad", "convocante", "integrador", "estado", "estatus", "resultado", "present_tecnica"]:
-    if col in df.columns:
-        df[col] = df[col].fillna("").astype(str).str.strip()
 
 
 
