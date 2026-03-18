@@ -28,28 +28,37 @@ footer {visibility: hidden;}
 header {visibility: hidden;}
 
 
+st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
+
 .filters-box {
     background: #f1f3f7;
-    padding: 22px 24px;
+    padding: 26px 28px;
     border-radius: 16px;
     margin-top: 18px;
     margin-bottom: 18px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
-.filters-box {
-    background: #f1f3f7;
-    padding: 22px 24px;
-    border-radius: 16px;
-    margin-top: 18px;
-    margin-bottom: 18px;
+div[data-testid="stSelectbox"] [data-baseweb="select"] > div:focus-within {
+    border: 1px solid #2d4de2 !important;
+    box-shadow: 0 0 0 2px rgba(45, 77, 226, 0.15);
 }
+
+
+
+div[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
+    border: 1px solid #cfd6e6 !important;
+}
+
+
+
 
 /* LABELS */
 div[data-testid="stSelectbox"] label {
     color: #2c2f5a !important;
     font-weight: 700 !important;
-    font-size: 15px !important;
+    font-size: 14px !important;
+    margin-bottom: 6px !important;
 }
 
 /* CAJA DEL SELECT */
@@ -175,24 +184,7 @@ html, body, [class*="css"] {
     box-shadow: none;
 }
 
-div[data-testid="stSelectbox"] > label {
-    color: #ffffff !important;
-    font-weight: 700 !important;
-    font-size: 15px !important;
-}
 
-div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
-    background: #2a2d3a !important;
-    border-radius: 14px !important;
-    border: none !important;
-    min-height: 58px !important;
-    color: white !important;
-}
-
-div[data-testid="stSelectbox"] [data-baseweb="select"] span {
-    color: white !important;
-    font-size: 16px !important;
-}
 
 .kpi-card {
     border-radius: 16px;
