@@ -7,7 +7,7 @@ import html as ihtml
 # CONFIG
 # =========================================
 st.set_page_config(
-    page_title="Panel de Oportunidades",
+    page_title="PANEL DE OPORTUNIDADES",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
