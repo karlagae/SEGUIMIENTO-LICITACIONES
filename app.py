@@ -46,6 +46,18 @@ div[data-testid="stSelectbox"] [data-baseweb="select"] > div:focus-within {
 
 
 
+
+/* TEXTO DEL VALOR SELECCIONADO */
+div[data-testid="stSelectbox"] [data-baseweb="select"] span {
+    color: #1f2a44 !important;  /* oscuro elegante */
+    font-weight: 600 !important;
+}
+
+
+
+
+
+
 div[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
     border: 1px solid #cfd6e6 !important;
 }
