@@ -65,13 +65,17 @@ div[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
 
 
 
-/* LABELS */
 div[data-testid="stSelectbox"] label {
-    color: #2c2f5a !important;
+    color: #ffffff !important;
     font-weight: 700 !important;
     font-size: 14px !important;
     margin-bottom: 6px !important;
 }
+
+
+
+
+
 
 /* CAJA DEL SELECT */
 div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
