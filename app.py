@@ -437,7 +437,7 @@ df = df.rename(columns={
     "TIPO": "tipo",
     "ESTATUS DE LA LICITACION": "estatus",
     "GANADA / PERDIDA": "resultado",
-    "ELABORO": "elaboro",
+    "DISTRIBUIDOR ACTUAL": "integrador",
     "FALLO": "fallo"
 })
 
@@ -455,7 +455,7 @@ for col in fechas_cols:
     if col in df.columns:
         df[col] = pd.to_datetime(df[col], errors="coerce")
 
-for col in ["tipo", "convocante", "estado", "estatus", "resultado", "elaboro", "licitacion"]:
+for col in ["tipo", "convocante", "estado", "estatus", "resultado", "integrador", "licitacion"]:
     if col in df.columns:
         df[col] = df[col].fillna("").astype(str).str.strip()
 
@@ -576,7 +576,10 @@ with f3:
     estado_filtro = st.selectbox("Estado", ["Todos"] + sorted([x for x in df["estado"].unique().tolist() if x != ""]))
 
 with f4:
-    elaboro_filtro = st.selectbox("Elaboró", ["Todos"] + sorted([x for x in df["elaboro"].unique().tolist() if x != ""]))
+    integrador_filtro = st.selectbox(
+        "Integrador",
+        ["Todos"] + sorted([x for x in df["integrador"].unique().tolist() if x != ""])
+    )
 
 df_filtrado = df.copy()
 if tipo_filtro != "Todos":
@@ -585,8 +588,8 @@ if convocante_filtro != "Todos":
     df_filtrado = df_filtrado[df_filtrado["convocante"] == convocante_filtro]
 if estado_filtro != "Todos":
     df_filtrado = df_filtrado[df_filtrado["estado"] == estado_filtro]
-if elaboro_filtro != "Todos":
-    df_filtrado = df_filtrado[df_filtrado["elaboro"] == elaboro_filtro]
+if integrador_filtro != "Todos":
+    df_filtrado = df_filtrado[df_filtrado["integrador"] == integrador_filtro]
 
 
 
@@ -796,7 +799,7 @@ st.markdown("</div>", unsafe_allow_html=True)
 # DETALLE OPCIONAL
 # =========================================
 with st.expander("Ver tabla detallada"):
-    columnas_mostrar = ["tipo", "licitacion", "convocante", "estado", "estatus", "resultado", "fallo", "elaboro"]
+    columnas_mostrar = ["tipo", "licitacion", "convocante", "estado", "estatus", "resultado", "fallo", "integrador"]
     columnas_existentes = [c for c in columnas_mostrar if c in df_filtrado.columns]
     st.dataframe(df_filtrado[columnas_existentes], use_container_width=True)
 
