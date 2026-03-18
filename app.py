@@ -30,14 +30,7 @@ header {visibility: hidden;}
 
 
 
-.filters-box {
-    background: #f1f3f7;
-    padding: 26px 28px;
-    border-radius: 16px;
-    margin-top: 18px;
-    margin-bottom: 18px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-}
+
 
 div[data-testid="stSelectbox"] [data-baseweb="select"] > div:focus-within {
     border: 1px solid #2d4de2 !important;
@@ -556,7 +549,7 @@ st.markdown('<div class="dashboard-body">', unsafe_allow_html=True)
 
 
 
-st.markdown('<div class="filters-box">', unsafe_allow_html=True)
+
 
 # FILTROS
 # =========================================
@@ -588,7 +581,7 @@ if elaboro_filtro != "Todos":
 
 
 
-st.markdown('</div>', unsafe_allow_html=True)
+
 
 
 # =========================================
