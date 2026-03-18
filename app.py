@@ -79,6 +79,12 @@ div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
+
+
+div[data-testid="stSelectbox"] *:first-child {
+    color: #ffffff !important;
+}
+
 /* TEXTO */
 div[data-testid="stSelectbox"] span {
     color: #5b6178 !important;
@@ -401,12 +407,7 @@ html, body, [class*="css"] {
 
 
 
-/* FORZAR TEXTO DE LABELS DE FILTROS */
-div[data-testid="stSelectbox"] > div:first-child {
-    color: #ffffff !important;
-    font-weight: 700 !important;
-    font-size: 14px !important;
-}
+
 
 .dot {
     color: #2d4de2;
