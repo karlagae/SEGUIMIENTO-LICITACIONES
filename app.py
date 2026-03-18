@@ -464,6 +464,20 @@ if "junta_aclaraciones" in df.columns:
 if "fallo" in df.columns:
     df["fallo"] = pd.to_datetime(df["fallo"], errors="coerce")
 
+
+
+
+# =========================================
+# LIMPIEZA DE COLUMNAS
+# =========================================
+for col in ["tipo", "licitacion", "especialidad", "convocante", "integrador", "estatus", "resultado", "present_tecnica"]:
+    if col in df.columns:
+        df[col] = df[col].fillna("").astype(str).str.strip()
+
+
+
+
+
 # =========================================
 # FUNCIONES
 # =========================================
