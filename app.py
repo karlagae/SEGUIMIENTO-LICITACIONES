@@ -27,7 +27,11 @@ st.markdown("""
 footer {visibility: hidden;}
 header {visibility: hidden;}
 
-
+.table-header.summary-8, .table-row.summary-8 {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr 1.2fr 1.2fr 1.2fr 1.2fr 1.2fr 1fr;
+    align-items: center;
+}
 
 
 
@@ -688,10 +692,27 @@ df_tabla = df_tabla.head(6)
 
 filas_html = ""
 for _, row in df_tabla.iterrows():
-    titulo = ihtml.escape(limpiar(row.get("licitacion", "")) or "Sin identificador")
-    estado_badge, badge_class = badge_estado(row)
-    referencia = ihtml.escape(limpiar(row.get("tipo", "")) or "-")
-    cierre = ihtml.escape(formatear_fecha(row.get("fallo", "")))
+    tipo = ihtml.escape(limpiar(row.get("tipo", "")) or "-")
+    licitacion = ihtml.escape(limpiar(row.get("licitacion", "")) or "-")
+    especialidad = ihtml.escape(limpiar(row.get("especialidad", "")) or "-")
+    convocante = ihtml.escape(limpiar(row.get("convocante", "")) or "-")
+    integrador = ihtml.escape(limpiar(row.get("integrador", "")) or "-")
+    junta = ihtml.escape(formatear_fecha(row.get("junta_aclaraciones", "")))
+    present = ihtml.escape(limpiar(row.get("present_tecnica", "")) or "-")
+    fallo = ihtml.escape(formatear_fecha(row.get("fallo", "")))
+
+    filas_html += f"""
+<div class="table-row summary-8">
+<div>{tipo}</div>
+<div>{licitacion}</div>
+<div>{especialidad}</div>
+<div>{convocante}</div>
+<div>{integrador}</div>
+<div>{junta}</div>
+<div>{present}</div>
+<div>{fallo}</div>
+</div>
+"""
 
     filas_html += f"""
 <div class="table-row">
@@ -710,11 +731,15 @@ st.markdown(f"""
 </div>
 
 <div class="table-wrap">
-<div class="table-header">
-<div>Proceso</div>
-<div>Estado</div>
-<div>Referencia</div>
-<div>Cierre</div>
+<div class="table-header summary-8">
+<div>Tipo</div>
+<div>Número Licitación</div>
+<div>Especialidad</div>
+<div>Convocante</div>
+<div>Integrador</div>
+<div>Junta</div>
+<div>Present. Técnica</div>
+<div>Fallo</div>
 </div>
 {filas_html}
 </div>
