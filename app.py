@@ -764,25 +764,24 @@ if not integradores_resumen.empty:
         altura = max(18, int((valor / max_val) * 160))
         clase = colores_barras[i % len(colores_barras)]
 
-        bars_html += f"""
-        <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-end; width:70px;">
-            <div class="bar {clase}" style="height:{altura}px;"></div>
-            <div style="margin-top:8px; font-size:12px; text-align:center; color:#223660; line-height:1.2;">
-                {ihtml.escape(str(nombre))}
-            </div>
-            <div style="margin-top:4px; font-size:12px; font-weight:700; color:#223660;">
-                {valor}
-            </div>
-        </div>
-        """
+        bars_html += f"""<div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-end; width:70px;">
+<div class="bar {clase}" style="height:{altura}px;"></div>
+<div style="margin-top:8px; font-size:12px; text-align:center; color:#223660; line-height:1.2;">
+{ihtml.escape(str(nombre))}
+</div>
+<div style="margin-top:4px; font-size:12px; font-weight:700; color:#223660;">
+{valor}
+</div>
+</div>"""
 else:
-    bars_html = """
-    <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-end; width:70px;">
-        <div class="bar bar-blue" style="height:20px;"></div>
-        <div style="margin-top:8px; font-size:12px; text-align:center; color:#223660;">Sin datos</div>
-        <div style="margin-top:4px; font-size:12px; font-weight:700; color:#223660;">0</div>
-    </div>
-    """
+    bars_html = """<div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-end; width:70px;">
+<div class="bar bar-blue" style="height:20px;"></div>
+<div style="margin-top:8px; font-size:12px; text-align:center; color:#223660;">Sin datos</div>
+<div style="margin-top:4px; font-size:12px; font-weight:700; color:#223660;">0</div>
+</div>"""
+
+
+
 
 # =========================================
 # ACTIVIDADES
