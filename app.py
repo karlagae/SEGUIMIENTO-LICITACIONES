@@ -714,14 +714,7 @@ for _, row in df_tabla.iterrows():
 </div>
 """
 
-    filas_html += f"""
-<div class="table-row">
 
-<div><span class="status-pill {badge_class}">{estado_badge}</span></div>
-<div>{referencia}</div>
-<div>{cierre}</div>
-</div>
-"""
 
 st.markdown(f"""
 <div class="white-box">
