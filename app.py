@@ -744,25 +744,45 @@ st.markdown("<div style='height:22px'></div>", unsafe_allow_html=True)
 # =========================================
 # ESTADÍSTICAS
 # =========================================
-tipos_resumen = (
-    df_filtrado["tipo"]
-    .replace("", pd.NA)
-    .dropna()
+# =========================================
+# ESTADÍSTICAS - PROCESOS POR INTEGRADOR
+# =========================================
+integradores_resumen = (
+    df_filtrado["integrador"]
+    .replace("", "Sin asignar")
+    .fillna("Sin asignar")
     .value_counts()
     .head(6)
 )
 
 bars_html = ""
-max_val = tipos_resumen.max() if not tipos_resumen.empty else 1
+max_val = integradores_resumen.max() if not integradores_resumen.empty else 1
 colores_barras = ["bar-blue", "bar-blue2", "bar-orange", "bar-blue3", "bar-navy", "bar-orange2"]
 
-if not tipos_resumen.empty:
-    for i, (_, valor) in enumerate(tipos_resumen.items()):
+if not integradores_resumen.empty:
+    for i, (nombre, valor) in enumerate(integradores_resumen.items()):
         altura = max(18, int((valor / max_val) * 160))
         clase = colores_barras[i % len(colores_barras)]
-        bars_html += f'<div class="bar {clase}" style="height:{altura}px;"></div>'
+
+        bars_html += f"""
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-end; width:70px;">
+            <div class="bar {clase}" style="height:{altura}px;"></div>
+            <div style="margin-top:8px; font-size:12px; text-align:center; color:#223660; line-height:1.2;">
+                {ihtml.escape(str(nombre))}
+            </div>
+            <div style="margin-top:4px; font-size:12px; font-weight:700; color:#223660;">
+                {valor}
+            </div>
+        </div>
+        """
 else:
-    bars_html = '<div class="bar bar-blue" style="height:20px;"></div>'
+    bars_html = """
+    <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-end; width:70px;">
+        <div class="bar bar-blue" style="height:20px;"></div>
+        <div style="margin-top:8px; font-size:12px; text-align:center; color:#223660;">Sin datos</div>
+        <div style="margin-top:4px; font-size:12px; font-weight:700; color:#223660;">0</div>
+    </div>
+    """
 
 # =========================================
 # ACTIVIDADES
@@ -796,22 +816,18 @@ c1, c2 = st.columns([1.35, 1])
 with c1:
     st.markdown(f"""
 <div class="stat-card">
-<div class="stat-title">📊 Estadísticas</div>
+<div class="stat-title">📊 PROCESOS POR INTEGRADOR</div>
 <div class="bar-zone">
 {bars_html}
 </div>
 <div class="legend-row">
 <div class="legend-item">
 <div class="legend-color" style="background:#2d4de2;"></div>
-<div>Procesos por tipo</div>
+<div>Ranking de integradores</div>
 </div>
 <div class="legend-item">
 <div class="legend-color" style="background:#e87222;"></div>
-<div>Enfoque Werfen</div>
-</div>
-<div class="legend-item">
-<div class="legend-color" style="background:#111111;"></div>
-<div>Cierre</div>
+<div>Procesos registrados</div>
 </div>
 </div>
 </div>
