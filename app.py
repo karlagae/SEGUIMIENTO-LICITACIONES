@@ -356,8 +356,8 @@ html, body, [class*="css"] {
 }
 
 .bar {
-    width: 42px;
-    border-radius: 8px 8px 0 0;
+    width: 40px;
+    border-radius: 10px 10px 0 0;
 }
 
 .bar-blue { background: #2d4de2; }
@@ -760,22 +760,29 @@ max_val = integradores_resumen.max() if not integradores_resumen.empty else 1
 
 if not integradores_resumen.empty:
     for nombre, valor in integradores_resumen.items():
-        altura = max(18, int((valor / max_val) * 160))
+        altura = max(18, int((valor / max_val) * 140))
 
-        bars_html += f"""<div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-end; width:90px;">
-<div class="bar bar-orange" style="height:{altura}px;"></div>
+        bars_html += f"""<div style="display:flex; flex-direction:column; align-items:center; width:90px;">
+
+<!-- NUMERO ARRIBA -->
+<div style="font-size:14px; font-weight:800; color:#223660; margin-bottom:6px;">
+{valor}
+</div>
+
+<!-- BARRA -->
+<div class="bar bar-orange" style="height:{altura}px; width:40px;"></div>
+
+<!-- NOMBRE ABAJO -->
 <div style="margin-top:8px; font-size:12px; text-align:center; color:#223660; line-height:1.2; font-weight:600;">
 {ihtml.escape(str(nombre))}
 </div>
-<div style="margin-top:4px; font-size:13px; font-weight:700; color:#223660;">
-{valor}
-</div>
+
 </div>"""
 else:
-    bars_html = """<div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-end; width:90px;">
-<div class="bar bar-orange" style="height:20px;"></div>
-<div style="margin-top:8px; font-size:12px; text-align:center; color:#223660; font-weight:600;">Sin datos</div>
-<div style="margin-top:4px; font-size:13px; font-weight:700; color:#223660;">0</div>
+    bars_html = """<div style="display:flex; flex-direction:column; align-items:center; width:90px;">
+<div style="font-size:14px; font-weight:800;">0</div>
+<div class="bar bar-orange" style="height:20px; width:40px;"></div>
+<div style="margin-top:8px; font-size:12px;">Sin datos</div>
 </div>"""
 
 
