@@ -11,166 +11,84 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
-st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
+
 # =========================================
 # CSS GENERAL
 # =========================================
 st.markdown("""
 <style>
-
-
-
-
-
-
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 header {visibility: hidden;}
-
-.table-header.summary-8, .table-row.summary-8 {
-    display: grid;
-    grid-template-columns: 1fr 1.6fr 1.2fr 1.2fr 1.2fr 1.2fr 1.2fr 1fr;
-    align-items: center;
-}
-
-
-
-
-div[data-testid="stSelectbox"] [data-baseweb="select"] > div:focus-within {
-    border: 1px solid #2d4de2 !important;
-    box-shadow: 0 0 0 2px rgba(45, 77, 226, 0.15);
-}
-
-
-
-
-/* TEXTO DEL VALOR SELECCIONADO */
-div[data-testid="stSelectbox"] [data-baseweb="select"] span {
-    color: #1f2a44 !important;  /* oscuro elegante */
-    font-weight: 600 !important;
-}
-
-
-
-
-
-
-div[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
-    border: 1px solid #cfd6e6 !important;
-}
-
-
-
-
-div[data-testid="stSelectbox"] label {
-    color: #ffffff !important;
-    font-weight: 700 !important;
-    font-size: 14px !important;
-    margin-bottom: 6px !important;
-}
-
-
-
-
-
-
-/* CAJA DEL SELECT */
-div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
-    background: #ffffff !important;
-    border-radius: 12px !important;
-    border: 1px solid #e3e7ef !important;
-    min-height: 52px !important;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-
-
-div[data-testid="stSelectbox"] *:first-child {
-    color: #ffffff !important;
-}
-
-/* TEXTO */
-div[data-testid="stSelectbox"] span {
-    color: #5b6178 !important;
-    font-size: 15px !important;
-}
-
-.block-container {
-    padding-top: 0 !important;
-    padding-bottom: 1.2rem !important;
-    padding-left: 1.2rem !important;
-    padding-right: 1.2rem !important;
-    max-width: 100% !important;
-}
-
-.stApp {
-    background: linear-gradient(180deg, #06038D 0%, #0a0f5c 100%);
-}
 
 html, body, [class*="css"] {
     font-family: "Segoe UI", sans-serif;
 }
 
+.block-container {
+    padding-top: 0 !important;
+    padding-bottom: 1.2rem !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    max-width: 100% !important;
+}
+
+.stApp {
+    background: #F5F6FA;
+}
+
+/* ---- TOPBAR ---- */
 .topbar {
     width: 100%;
-    max-width: 100%;
-    margin: 0;
-    background: linear-gradient(90deg, #032a84 0%, #0b47c2 100%);
+    background: #06038D;
     color: white;
-    border-radius: 0;
-    padding: 22px 34px;
+    padding: 16px 28px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: none;
-}
-
-
-.main-shell {
-    width: 100%;
-    max-width: 1460px;
-    margin: 14px auto 24px auto;
-    overflow: hidden;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 
 .brand-wrap {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 10px;
 }
 
 .brand-icon {
-    font-size: 34px;
+    width: 34px;
+    height: 34px;
+    background: #E87722;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
 }
 
 .brand-title {
-    font-size: 21px;
-    font-weight: 800;
-    line-height: 1.0;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.2;
 }
 
 .nav-wrap {
     display: flex;
-    gap: 34px;
+    gap: 28px;
     align-items: center;
 }
 
 .nav-item {
-    color: white;
-    font-size: 17px;
-    font-weight: 700;
-    position: relative;
+    color: rgba(255,255,255,0.7);
+    font-size: 14px;
+    font-weight: 600;
+    padding-bottom: 3px;
 }
 
-.nav-item.active::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -10px;
-    width: 100%;
-    height: 2px;
-    background: #e87222;
-    border-radius: 10px;
+.nav-item.active {
+    color: white;
+    border-bottom: 2px solid #E87722;
 }
 
 .user-wrap {
@@ -178,251 +96,309 @@ html, body, [class*="css"] {
     align-items: center;
     gap: 14px;
     color: white;
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.notif-wrap {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: rgba(255,255,255,0.8);
+    font-size: 13px;
+}
+
+.notif-dot {
+    width: 7px;
+    height: 7px;
+    background: #E87722;
+    border-radius: 50%;
+    display: inline-block;
 }
 
 .user-badge {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    background: #f6d8c2;
+    background: #f5d5b8;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid rgba(255,255,255,0.65);
+    font-size: 14px;
+    border: 2px solid rgba(255,255,255,0.4);
 }
 
+/* ---- BODY ---- */
 .dashboard-body {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    background: transparent;
-    padding: 22px;
-    border-radius: 0;
-    box-shadow: none;
+    background: #F5F6FA;
+    padding: 22px 28px;
 }
 
+/* ---- FILTROS (selectbox de streamlit) ---- */
+div[data-testid="stSelectbox"] label {
+    color: #3d3b80 !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 5px !important;
+}
 
+div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+    background: #ffffff !important;
+    border-radius: 8px !important;
+    border: 1px solid #E8EAF0 !important;
+    min-height: 42px !important;
+    box-shadow: none !important;
+}
 
+div[data-testid="stSelectbox"] [data-baseweb="select"] > div:focus-within {
+    border: 1px solid #E87722 !important;
+    box-shadow: 0 0 0 2px rgba(232,119,34,0.15) !important;
+}
+
+div[data-testid="stSelectbox"] [data-baseweb="select"] span {
+    color: #0a0850 !important;
+    font-weight: 500 !important;
+    font-size: 13px !important;
+}
+
+/* ---- KPI CARDS ---- */
 .kpi-card {
-    border-radius: 16px;
-    padding: 18px 20px;
+    border-radius: 12px;
+    padding: 16px 18px;
     color: white;
-    min-height: 92px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
-}
-
-.kpi-blue {
-    background: linear-gradient(90deg, #2d4de2 0%, #3d59d3 100%);
-}
-
-.kpi-blue2 {
-    background: linear-gradient(90deg, #2e43d4 0%, #4052d7 100%);
-}
-
-.kpi-orange {
-    background: linear-gradient(90deg, #e87222 0%, #f0b349 100%);
-}
-
-.kpi-navy {
-    background: linear-gradient(90deg, #141414 0%, #232a74 100%);
-}
-
-.kpi-top {
+    min-height: 82px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
 }
 
+.kpi-total  { background: #06038D; }
+.kpi-curso  { background: #2e2cbe; }
+.kpi-ganadas { background: #E87722; }
+.kpi-perdidas { background: #000000; }
+
 .kpi-icon {
-    width: 46px;
-    height: 46px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.14);
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.16);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
+    font-size: 20px;
+    flex-shrink: 0;
 }
 
-.kpi-title {
-    font-size: 16px;
-    font-weight: 700;
-    opacity: 0.98;
+.kpi-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.82);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .kpi-value {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 800;
-    margin-top: 6px;
+    color: white;
+    line-height: 1.1;
+    margin-top: 2px;
 }
 
-.white-box {
+/* ---- CARD BLANCA ---- */
+.card {
     background: white;
-    border-radius: 16px;
-    padding: 22px;
-    box-shadow: 0 5px 16px rgba(0,0,0,0.07);
-    border: 1px solid #e9eef6;
+    border-radius: 12px;
+    border: 1px solid #E8EAF0;
+    padding: 20px;
+    margin-bottom: 18px;
 }
 
-.section-title {
-    font-size: 22px;
-    font-weight: 800;
-    color: #17326a;
-    margin-bottom: 16px;
+.card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0a0850;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #E8EAF0;
+    padding-bottom: 12px;
 }
 
-.mini-btn {
-    border: 1px solid #d6deea;
-    background: white;
-    color: #30466f;
-    padding: 9px 16px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 14px;
-    text-align: center;
+.card-title-accent {
+    width: 4px;
+    height: 18px;
+    background: #E87722;
+    border-radius: 2px;
+    flex-shrink: 0;
 }
 
+/* ---- TABLA RESUMEN ---- */
 .table-wrap {
-    border: 1px solid #edf2f8;
-    border-radius: 10px;
+    border: 1px solid #E8EAF0;
+    border-radius: 8px;
     overflow: hidden;
 }
 
-.table-header, .table-row {
+.table-header.summary-9, .table-row.summary-9 {
     display: grid;
-    grid-template-columns: 2.5fr 1.3fr 1.3fr 1fr;
+    grid-template-columns: 1.1fr 1.8fr 1fr 1.1fr 1fr 1fr 1fr 1fr 1fr;
     align-items: center;
 }
 
 .table-header {
-    background: #eff4fa;
-    color: #30415f;
+    background: #F0F2F9;
+    color: #3d3b80;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .table-header div, .table-row div {
-    padding: 15px 18px;
+    padding: 10px 14px;
 }
 
 .table-row {
-    border-top: 1px solid #edf1f7;
-    color: #27395f;
+    border-top: 1px solid #E8EAF0;
+    color: #0a0850;
     background: white;
-    font-size: 15px;
+    font-size: 13px;
+    transition: background 0.15s;
 }
 
-.status-pill {
+.table-row:hover {
+    background: #F8F9FD;
+}
+
+/* ---- BADGES ESPECIALIDAD ---- */
+.badge {
     display: inline-block;
-    padding: 6px 12px;
-    border-radius: 8px;
-    color: white;
-    font-size: 13px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
     font-weight: 700;
 }
 
-.pill-blue { background: #2f53d8; }
-.pill-blue2 { background: #3950b9; }
-.pill-orange { background: #e8a035; }
-.pill-orange2 { background: #d88c27; }
-.pill-navy { background: #111111; }
-.pill-gray { background: #7b88a5; }
+.badge-lab      { background: #EEEEFF; color: #06038D; }
+.badge-bs       { background: #FFF0E6; color: #a84e0a; }
+.badge-cardio   { background: #E6F4FF; color: #0a5490; }
+.badge-default  { background: #F0F2F9; color: #3d3b80; }
 
+/* ---- PILLS ESTATUS ---- */
+.pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.pill-proceso    { background: #EEEEFF; color: #06038D; }
+.pill-adjudicada { background: #FFF0E6; color: #a84e0a; }
+.pill-cerrada    { background: #F0F0F0; color: #333333; }
+.pill-abierta    { background: #E6FFE6; color: #1a6e1a; }
+.pill-oferta     { background: #FFF8E6; color: #8a6000; }
+.pill-sin        { background: #F0F2F9; color: #888; }
+
+.tipo-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: #3d3b80;
+}
+
+.integ-tag {
+    font-size: 12px;
+    font-weight: 600;
+    color: #E87722;
+}
+
+.fecha-tag {
+    font-size: 12px;
+    color: #0a0850;
+}
+
+.lic-num {
+    font-size: 11px;
+    font-weight: 600;
+    color: #06038D;
+    word-break: break-all;
+}
+
+/* ---- BARRAS INTEGRADOR ---- */
 .stat-card {
     background: white;
-    border-radius: 16px;
-    padding: 22px;
-    box-shadow: 0 5px 16px rgba(0,0,0,0.07);
-    border: 1px solid #e9eef6;
+    border-radius: 12px;
+    border: 1px solid #E8EAF0;
+    padding: 20px;
     height: 100%;
 }
 
 .stat-title {
-    font-size: 20px;
-    font-weight: 800;
-    color: #17326a;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0a0850;
     margin-bottom: 14px;
-}
-
-.bar-zone {
-    height: 220px;
-    display: flex;
-    align-items: end;
-    gap: 18px;
-    padding: 10px 6px 0 6px;
-    border-top: 1px solid #edf1f7;
-}
-
-.bar {
-    width: 40px;
-    border-radius: 10px 10px 0 0;
-}
-
-.bar-blue { background: #2d4de2; }
-.bar-blue2 { background: #4155c9; }
-.bar-blue3 { background: #8ca0ea; }
-.bar-orange { background: #e87222; }
-.bar-orange2 { background: #f0b349; }
-.bar-navy { background: #111111; }
-
-.legend-row {
-    display: flex;
-    gap: 18px;
-    flex-wrap: wrap;
-    margin-top: 14px;
-    color: #223660;
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.legend-item {
     display: flex;
     align-items: center;
     gap: 8px;
+    border-bottom: 1px solid #E8EAF0;
+    padding-bottom: 12px;
 }
 
-.legend-color {
-    width: 14px;
-    height: 14px;
-    border-radius: 3px;
+.bar-zone {
+    height: 200px;
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    padding: 10px 6px 0 6px;
+    border-bottom: 2px solid #E8EAF0;
+    overflow-x: auto;
 }
 
+.bar { border-radius: 4px 4px 0 0; }
+.bar-naranja { background: #E87722; }
+.bar-azul    { background: #06038D; }
+
+/* ---- ACTIVIDADES ---- */
 .activity-list {
     list-style: none;
     padding-left: 0;
     margin: 0;
-    border-top: 1px solid #edf1f7;
 }
 
 .activity-list li {
-    padding: 14px 0;
-    border-bottom: 1px solid #edf1f7;
-    font-size: 16px;
-    color: #27395f;
+    padding: 10px 0;
+    border-bottom: 1px solid #E8EAF0;
+    font-size: 12px;
+    color: #0a0850;
     line-height: 1.4;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
 }
 
-.activity-list li:last-child {
-    border-bottom: none;
-}
-
-
-
-
-
+.activity-list li:last-child { border-bottom: none; }
 
 .dot {
-    color: #2d4de2;
+    color: #E87722;
     font-weight: 900;
-    margin-right: 10px;
+    font-size: 10px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.act-fecha {
+    font-size: 11px;
+    color: #3d3b80;
+    margin-top: 2px;
 }
 
 @media (max-width: 1100px) {
-    .nav-wrap {
-        display: none;
-    }
+    .nav-wrap { display: none; }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -439,7 +415,7 @@ df = df.rename(columns={
     "CONVOCANTE": "convocante",
     "ESTADO": "estado",
     "TIPO": "tipo",
-    "ESPECIALIDAD": "especialidad",
+    "ESPECIALIDAD\nSERV.INT (LAB)\nSER.INT (BS)\nSERV.INT (CARDIO)": "especialidad",
     "DISTRIBUIDOR ACTUAL": "integrador",
     "JUNTA ACLARACIONES": "junta_aclaraciones",
     "PRESENT. TECNICA": "present_tecnica",
@@ -448,39 +424,15 @@ df = df.rename(columns={
     "GANADA / PERDIDA": "resultado"
 })
 
+# Fechas
+for col in ["junta_aclaraciones", "fallo", "present_tecnica"]:
+    if col in df.columns:
+        df[col] = pd.to_datetime(df[col], errors="coerce")
 
-
-
-
-
-
-
-
-
-
-
-# =========================================
-# FORMATO DE FECHAS (AQUÍ VA LO QUE NO SABÍAS)
-# =========================================
-if "junta_aclaraciones" in df.columns:
-    df["junta_aclaraciones"] = pd.to_datetime(df["junta_aclaraciones"], errors="coerce")
-
-if "fallo" in df.columns:
-    df["fallo"] = pd.to_datetime(df["fallo"], errors="coerce")
-
-
-
-
-# =========================================
-# LIMPIEZA DE COLUMNAS
-# =========================================
-for col in ["tipo", "licitacion", "especialidad", "convocante", "integrador", "estatus", "resultado", "present_tecnica"]:
+# Limpieza de texto
+for col in ["tipo", "licitacion", "especialidad", "convocante", "integrador", "estatus", "resultado"]:
     if col in df.columns:
         df[col] = df[col].fillna("").astype(str).str.strip()
-
-
-
-
 
 # =========================================
 # FUNCIONES
@@ -489,9 +441,7 @@ def limpiar(v):
     if pd.isna(v):
         return ""
     s = str(v).strip()
-    if s.lower() == "nan":
-        return ""
-    return s
+    return "" if s.lower() == "nan" else s
 
 def formatear_fecha(v):
     if pd.isna(v):
@@ -513,96 +463,86 @@ def detectar_en_curso(row):
 
 def detectar_ganada(row):
     extra = row.get("INFORMACIÓN DE GRAFICAS (RESULTADO)", "")
-    texto = " ".join([
-        limpiar(row.get("resultado", "")),
-        limpiar(extra)
-    ]).upper()
+    texto = " ".join([limpiar(row.get("resultado", "")), limpiar(extra)]).upper()
     return "GANAD" in texto or "ADJUDIC" in texto
 
 def detectar_perdida(row):
     extra = row.get("INFORMACIÓN DE GRAFICAS (RESULTADO)", "")
-    texto = " ".join([
-        limpiar(row.get("resultado", "")),
-        limpiar(extra)
-    ]).upper()
+    texto = " ".join([limpiar(row.get("resultado", "")), limpiar(extra)]).upper()
     return "PERDID" in texto or "NO ADJUDIC" in texto or "DESECHAD" in texto or "CANCEL" in texto
 
-def badge_estado(row):
+def badge_especialidad(esp):
+    e = esp.upper()
+    if "LAB" in e:
+        return f'<span class="badge badge-lab">{ihtml.escape(esp) or "—"}</span>'
+    if "SANGRE" in e or "BS" in e:
+        return f'<span class="badge badge-bs">{ihtml.escape(esp) or "—"}</span>'
+    if "CARDIO" in e:
+        return f'<span class="badge badge-cardio">{ihtml.escape(esp) or "—"}</span>'
+    if esp and esp != "-":
+        return f'<span class="badge badge-default">{ihtml.escape(esp)}</span>'
+    return '<span style="color:#aaa">—</span>'
+
+def badge_estatus(row):
     estatus = limpiar(row.get("estatus", ""))
     resultado = limpiar(row.get("resultado", ""))
     extra = limpiar(row.get("INFORMACIÓN DE GRAFICAS (RESULTADO)", ""))
     texto = " ".join([estatus, resultado, extra]).upper()
 
     if "GANAD" in texto or "ADJUDIC" in texto:
-        return "Adjudicada", "pill-orange"
+        return '<span class="pill pill-adjudicada">Adjudicada</span>'
     if "PERDID" in texto or "DESECHAD" in texto or "CANCEL" in texto:
-        return "Cerrada", "pill-navy"
+        return '<span class="pill pill-cerrada">Cerrada</span>'
+    if "TERMINADA" in texto:
+        return '<span class="pill pill-cerrada">Terminada</span>'
     if "ABIERTA" in texto:
-        return "Abierta", "pill-orange2"
+        return '<span class="pill pill-abierta">Abierta</span>'
     if "OFERTA" in texto or "COTIZ" in texto:
-        return "Recepción de Ofertas", "pill-blue2"
+        return '<span class="pill pill-oferta">Rec. Ofertas</span>'
     if "EVALU" in texto or "PROCESO" in texto or "CURSO" in texto or "VIGENTE" in texto:
-        return "En Evaluación", "pill-blue"
-    return "Sin estatus", "pill-gray"
+        return '<span class="pill pill-proceso">En proceso</span>'
+    return '<span class="pill pill-sin">Sin estatus</span>'
 
 # =========================================
-
-
-st.markdown('<div class="main-shell">', unsafe_allow_html=True)
-
-
-# HEADER
+# TOPBAR
 # =========================================
 st.markdown("""
 <div class="topbar">
-<div class="brand-wrap">
-<div class="brand-icon">📄</div>
-<div class="brand-title">Panel de<br>Oportunidades</div>
-</div>
-
-<div class="nav-wrap">
-<div class="nav-item active">Inicio</div>
-<div class="nav-item">Procesos</div>
-<div class="nav-item">Reportes</div>
-</div>
-
-<div class="user-wrap">
-<div>🔔 Notificaciones</div>
-<div class="user-badge">👩🏻</div>
-<div>Usuario ▾</div>
-</div>
+  <div class="brand-wrap">
+    <div class="brand-icon">📄</div>
+    <div class="brand-title">Panel de<br>Oportunidades</div>
+  </div>
+  <div class="nav-wrap">
+    <div class="nav-item active">Inicio</div>
+    <div class="nav-item">Procesos</div>
+    <div class="nav-item">Reportes</div>
+  </div>
+  <div class="user-wrap">
+    <div class="notif-wrap"><span class="notif-dot"></span> Notificaciones</div>
+    <div class="user-badge">👤</div>
+    <span>Usuario ▾</span>
+  </div>
 </div>
 """, unsafe_allow_html=True)
 
 # =========================================
-# ABRIR CUERPO
+# BODY
 # =========================================
 st.markdown('<div class="dashboard-body">', unsafe_allow_html=True)
 
 # =========================================
-
-
-
-
-
 # FILTROS
 # =========================================
 f1, f2, f3, f4 = st.columns(4)
 
 with f1:
     tipo_filtro = st.selectbox("Tipo", ["Todos"] + sorted([x for x in df["tipo"].unique().tolist() if x != ""]))
-
 with f2:
     convocante_filtro = st.selectbox("Convocante", ["Todos"] + sorted([x for x in df["convocante"].unique().tolist() if x != ""]))
-
 with f3:
     estado_filtro = st.selectbox("Estado", ["Todos"] + sorted([x for x in df["estado"].unique().tolist() if x != ""]))
-
 with f4:
-    integrador_filtro = st.selectbox(
-        "Integrador",
-        ["Todos"] + sorted([x for x in df["integrador"].unique().tolist() if x != ""])
-    )
+    integrador_filtro = st.selectbox("Integrador", ["Todos"] + sorted([x for x in df["integrador"].unique().tolist() if x != ""]))
 
 df_filtrado = df.copy()
 if tipo_filtro != "Todos":
@@ -614,70 +554,47 @@ if estado_filtro != "Todos":
 if integrador_filtro != "Todos":
     df_filtrado = df_filtrado[df_filtrado["integrador"] == integrador_filtro]
 
-
-
-
-
-
-
+st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
 
 # =========================================
-# KPIS
+# KPIs
 # =========================================
 procesos_totales = len(df_filtrado)
-en_curso = int(df_filtrado.apply(detectar_en_curso, axis=1).sum())
-ganadas = int(df_filtrado.apply(detectar_ganada, axis=1).sum())
-perdidas = int(df_filtrado.apply(detectar_perdida, axis=1).sum())
-
-st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+en_curso  = int(df_filtrado.apply(detectar_en_curso, axis=1).sum())
+ganadas   = int(df_filtrado.apply(detectar_ganada, axis=1).sum())
+perdidas  = int(df_filtrado.apply(detectar_perdida, axis=1).sum())
 
 k1, k2, k3, k4 = st.columns(4)
 
 with k1:
     st.markdown(f"""
-<div class="kpi-card kpi-blue">
-<div class="kpi-top">
-<div class="kpi-icon">☑️</div>
-<div class="kpi-title">Procesos Totales</div>
-</div>
-<div class="kpi-value">{procesos_totales}</div>
-</div>
-""", unsafe_allow_html=True)
+<div class="kpi-card kpi-total">
+  <div class="kpi-icon">📋</div>
+  <div><div class="kpi-label">Procesos totales</div><div class="kpi-value">{procesos_totales}</div></div>
+</div>""", unsafe_allow_html=True)
 
 with k2:
     st.markdown(f"""
-<div class="kpi-card kpi-blue2">
-<div class="kpi-top">
-<div class="kpi-icon">⚖️</div>
-<div class="kpi-title">En Curso</div>
-</div>
-<div class="kpi-value">{en_curso}</div>
-</div>
-""", unsafe_allow_html=True)
+<div class="kpi-card kpi-curso">
+  <div class="kpi-icon">⏳</div>
+  <div><div class="kpi-label">En curso</div><div class="kpi-value">{en_curso}</div></div>
+</div>""", unsafe_allow_html=True)
 
 with k3:
     st.markdown(f"""
-<div class="kpi-card kpi-orange">
-<div class="kpi-top">
-<div class="kpi-icon">📁</div>
-<div class="kpi-title">Ganadas</div>
-</div>
-<div class="kpi-value">{ganadas}</div>
-</div>
-""", unsafe_allow_html=True)
+<div class="kpi-card kpi-ganadas">
+  <div class="kpi-icon">✅</div>
+  <div><div class="kpi-label">Ganadas</div><div class="kpi-value">{ganadas}</div></div>
+</div>""", unsafe_allow_html=True)
 
 with k4:
     st.markdown(f"""
-<div class="kpi-card kpi-navy">
-<div class="kpi-top">
-<div class="kpi-icon">➖</div>
-<div class="kpi-title">Perdidas</div>
-</div>
-<div class="kpi-value">{perdidas}</div>
-</div>
-""", unsafe_allow_html=True)
+<div class="kpi-card kpi-perdidas">
+  <div class="kpi-icon">✖️</div>
+  <div><div class="kpi-label">Perdidas</div><div class="kpi-value">{perdidas}</div></div>
+</div>""", unsafe_allow_html=True)
 
-st.markdown("<div style='height:22px'></div>", unsafe_allow_html=True)
+st.markdown("<div style='height:18px'></div>", unsafe_allow_html=True)
 
 # =========================================
 # TABLA RESUMEN
@@ -685,67 +602,61 @@ st.markdown("<div style='height:22px'></div>", unsafe_allow_html=True)
 df_tabla = df_filtrado.copy()
 if "fallo" in df_tabla.columns:
     df_tabla = df_tabla.sort_values(by="fallo", ascending=True, na_position="last")
-elif "PUBLICACION" in df_tabla.columns:
-    df_tabla = df_tabla.sort_values(by="PUBLICACION", ascending=False, na_position="last")
-
 df_tabla = df_tabla.head(6)
 
 filas_html = ""
 for _, row in df_tabla.iterrows():
-    tipo = ihtml.escape(limpiar(row.get("tipo", "")) or "-")
-    licitacion = ihtml.escape(limpiar(row.get("licitacion", "")) or "-")
-    especialidad = ihtml.escape(limpiar(row.get("especialidad", "")) or "-")
-    convocante = ihtml.escape(limpiar(row.get("convocante", "")) or "-")
-    integrador = ihtml.escape(limpiar(row.get("integrador", "")) or "-")
-    junta = ihtml.escape(formatear_fecha(row.get("junta_aclaraciones", "")))
-    present = ihtml.escape(limpiar(row.get("present_tecnica", "")) or "-")
-    fallo = ihtml.escape(formatear_fecha(row.get("fallo", "")))
+    tipo        = ihtml.escape(limpiar(row.get("tipo", "")) or "-")
+    licitacion  = ihtml.escape(limpiar(row.get("licitacion", "")) or "-")
+    especialidad = limpiar(row.get("especialidad", "")) or "-"
+    convocante  = ihtml.escape(limpiar(row.get("convocante", "")) or "-")
+    integrador  = limpiar(row.get("integrador", ""))
+    junta       = ihtml.escape(formatear_fecha(row.get("junta_aclaraciones", "")))
+    present     = ihtml.escape(formatear_fecha(row.get("present_tecnica", "")))
+    fallo       = ihtml.escape(formatear_fecha(row.get("fallo", "")))
+    estatus_html = badge_estatus(row)
+    esp_html    = badge_especialidad(especialidad)
+    integ_html  = f'<span class="integ-tag">{ihtml.escape(integrador)}</span>' if integrador else '<span style="color:#aaa">—</span>'
 
     filas_html += f"""
-<div class="table-row summary-8">
-<div>{tipo}</div>
-<div>{licitacion}</div>
-<div>{especialidad}</div>
-<div>{convocante}</div>
-<div>{integrador}</div>
-<div>{junta}</div>
-<div>{present}</div>
-<div>{fallo}</div>
+<div class="table-row summary-9">
+  <div><span class="tipo-tag">{tipo}</span></div>
+  <div><span class="lic-num">{licitacion}</span></div>
+  <div>{esp_html}</div>
+  <div>{convocante}</div>
+  <div>{integ_html}</div>
+  <div><span class="fecha-tag">{junta}</span></div>
+  <div><span class="fecha-tag">{present}</span></div>
+  <div><span class="fecha-tag">{fallo}</span></div>
+  <div>{estatus_html}</div>
 </div>
 """
 
-
-
 st.markdown(f"""
-<div class="white-box">
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
-<div class="section-title" style="margin-bottom:0;">Resumen de Oportunidades</div>
-
-</div>
-
-<div class="table-wrap">
-<div class="table-header summary-8">
-<div>Tipo</div>
-<div>Número Licitación</div>
-<div>Especialidad</div>
-<div>Convocante</div>
-<div>Integrador</div>
-<div>Junta</div>
-<div>Present. Técnica</div>
-<div>Fallo</div>
-</div>
-{filas_html}
-</div>
+<div class="card">
+  <div class="card-title">
+    <div class="card-title-accent"></div>
+    Resumen de oportunidades
+  </div>
+  <div class="table-wrap">
+    <div class="table-header summary-9">
+      <div>Tipo</div>
+      <div>Número licitación</div>
+      <div>Especialidad</div>
+      <div>Convocante</div>
+      <div>Integrador</div>
+      <div>Junta</div>
+      <div>Present. técnica</div>
+      <div>Fallo</div>
+      <div>Estatus</div>
+    </div>
+    {filas_html}
+  </div>
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown("<div style='height:22px'></div>", unsafe_allow_html=True)
-
 # =========================================
-# ESTADÍSTICAS
-# =========================================
-# =========================================
-# ESTADÍSTICAS - PROCESOS POR INTEGRADOR
+# ESTADÍSTICAS + ACTIVIDADES
 # =========================================
 integradores_resumen = (
     df_filtrado["integrador"]
@@ -757,49 +668,40 @@ integradores_resumen = (
 
 bars_html = ""
 max_val = integradores_resumen.max() if not integradores_resumen.empty else 1
+colores = ["bar-naranja", "bar-naranja", "bar-naranja", "bar-azul", "bar-azul", "bar-azul"]
 
 if not integradores_resumen.empty:
-    for nombre, valor in integradores_resumen.items():
-        altura = max(18, int((valor / max_val) * 140))
-
-        bars_html += f"""<div style="display:flex; flex-direction:column; align-items:center; width:90px;">
-
-<!-- NUMERO ARRIBA -->
-<div style="font-size:14px; font-weight:800; color:#223660; margin-bottom:6px;">
-{valor}
-</div>
-
-<!-- BARRA -->
-<div class="bar bar-orange" style="height:{altura}px; width:40px;"></div>
-
-<!-- NOMBRE ABAJO -->
-<div style="margin-top:8px; font-size:12px; text-align:center; color:#223660; line-height:1.2; font-weight:600;">
-{ihtml.escape(str(nombre))}
-</div>
-
+    for i, (nombre, valor) in enumerate(integradores_resumen.items()):
+        altura = max(18, int((valor / max_val) * 150))
+        color_clase = colores[i % len(colores)]
+        bars_html += f"""
+<div style="display:flex;flex-direction:column;align-items:center;min-width:60px;flex:1">
+  <div style="font-size:13px;font-weight:700;color:#0a0850;margin-bottom:4px">{valor}</div>
+  <div class="bar {color_clase}" style="height:{altura}px;width:36px"></div>
+  <div style="margin-top:7px;font-size:11px;text-align:center;color:#3d3b80;line-height:1.3;font-weight:600">{ihtml.escape(str(nombre))}</div>
 </div>"""
 else:
-    bars_html = """<div style="display:flex; flex-direction:column; align-items:center; width:90px;">
-<div style="font-size:14px; font-weight:800;">0</div>
-<div class="bar bar-orange" style="height:20px; width:40px;"></div>
-<div style="margin-top:8px; font-size:12px;">Sin datos</div>
-</div>"""
+    bars_html = '<div style="font-size:13px;color:#aaa">Sin datos</div>'
 
-
-
-
-# =========================================
-# ACTIVIDADES
-# =========================================
+# Actividades
 actividades = []
 for _, row in df_filtrado.iterrows():
     lic = limpiar(row.get("licitacion", "")) or "Proceso sin nombre"
-    for col in ["ENVIO DE PREGUNTAS", "JUNTA ACLARACIONES", "PROPUESTA ECONOMICA", "FALLO"]:
-        if col in df_filtrado.columns and pd.notnull(row.get(col)):
+    conv = limpiar(row.get("convocante", ""))
+    integ = limpiar(row.get("integrador", ""))
+    for col, label in [
+        ("JUNTA ACLARACIONES", "Junta aclaraciones"),
+        ("PRESENT. TECNICA",   "Present. técnica"),
+        ("FALLO",              "Fallo"),
+    ]:
+        val = row.get(col) if col in df_filtrado.columns else None
+        if val is not None and pd.notnull(val):
             actividades.append({
                 "licitacion": lic,
-                "evento": col.replace("_", " ").title(),
-                "fecha": pd.to_datetime(row.get(col), errors="coerce")
+                "evento": label,
+                "convocante": conv,
+                "integrador": integ,
+                "fecha": pd.to_datetime(val, errors="coerce")
             })
 
 df_act = pd.DataFrame(actividades)
@@ -808,45 +710,62 @@ actividad_items = ""
 if not df_act.empty:
     df_act = df_act.dropna(subset=["fecha"]).sort_values("fecha").head(5)
     for _, row in df_act.iterrows():
-        evento = ihtml.escape(str(row["evento"]))
-        lic = ihtml.escape(str(row["licitacion"]))
-        fecha = row["fecha"].strftime("%d %b %Y")
-        actividad_items += f'<li><span class="dot">●</span>{evento}: “{lic}” — {fecha}</li>'
+        evento  = ihtml.escape(str(row["evento"]))
+        lic     = ihtml.escape(str(row["licitacion"]))
+        fecha   = row["fecha"].strftime("%d %b %Y")
+        conv    = ihtml.escape(str(row["convocante"]))
+        integ   = ihtml.escape(str(row["integrador"]))
+        meta    = " · ".join(filter(None, [conv, integ if integ else ""]))
+        actividad_items += f"""
+<li>
+  <span class="dot">●</span>
+  <div>
+    <div>{evento}: <strong>{lic}</strong></div>
+    <div class="act-fecha">{fecha}{(' · ' + meta) if meta else ''}</div>
+  </div>
+</li>"""
 else:
-    actividad_items = '<li><span class="dot">●</span>No hay actividades próximas registradas.</li>'
+    actividad_items = '<li><span class="dot">●</span><div>No hay actividades próximas registradas.</div></li>'
 
-c1, c2 = st.columns([1.35, 1])
+c1, c2 = st.columns([1.4, 1])
 
 with c1:
     st.markdown(f"""
 <div class="stat-card">
-<div class="stat-title">📊 PROCESOS POR INTEGRADOR</div>
-<div class="bar-zone">
-{bars_html}
-</div>
-
+  <div class="stat-title">
+    <div class="card-title-accent"></div>
+    Procesos por integrador
+  </div>
+  <div class="bar-zone">
+    {bars_html}
+  </div>
 </div>
 """, unsafe_allow_html=True)
 
 with c2:
     st.markdown(f"""
 <div class="stat-card">
-<div class="stat-title">Última Actividad</div>
-<ul class="activity-list">
-{actividad_items}
-</ul>
+  <div class="stat-title">
+    <div class="card-title-accent"></div>
+    Actividades próximas
+  </div>
+  <ul class="activity-list">
+    {actividad_items}
+  </ul>
 </div>
 """, unsafe_allow_html=True)
 
 # =========================================
-# CERRAR CUERPO
+# CIERRE BODY
 # =========================================
 st.markdown("</div>", unsafe_allow_html=True)
 
 # =========================================
-# DETALLE OPCIONAL
+# EXPANDERS DETALLE
 # =========================================
-with st.expander("Ver tabla detallada"):
+st.markdown("<div style='padding:0 28px 28px 28px'>", unsafe_allow_html=True)
+
+with st.expander("Ver tabla detallada completa"):
     columnas_mostrar = ["tipo", "licitacion", "convocante", "estado", "estatus", "resultado", "fallo", "integrador"]
     columnas_existentes = [c for c in columnas_mostrar if c in df_filtrado.columns]
     st.dataframe(df_filtrado[columnas_existentes], use_container_width=True)
@@ -857,7 +776,4 @@ with st.expander("Ver actividades detalladas"):
     else:
         st.info("No hay actividades registradas.")
 
-
-
-st.markdown("</div>", unsafe_allow_html=True)  # dashboard-body
-st.markdown("</div>", unsafe_allow_html=True)  # main-shell
+st.markdown("</div>", unsafe_allow_html=True)
